@@ -25,29 +25,38 @@ public class Gui extends Application
 
         Controller c = new Controller();
         Fractal fr = new Fractal(c);
+        Fractal fr2 = new Fractal(c);
 
         long st = System.currentTimeMillis();
         int[][] points = fr.divergence_Julia();
-       // int[][] points = fr.divergence_Mandelbrot();
         long fin = System.currentTimeMillis();
         int d = (int) ((fin - st)/1000);
         System.out.println("calculated during " + d + " seconds");
 
+        long st2 = System.currentTimeMillis();
+        int[][] points2 = fr2.divergence_Mandelbrot();
+        long fin2 = System.currentTimeMillis();
+        int d2 = (int) ((fin2 - st2)/1000);
+        System.out.println("calculated during " + d2 + " seconds");
+
         BufferedImage img = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        BufferedImage img2 = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
         long start = System.currentTimeMillis();
         for ( int i = 0; i < c.getWidthPNG(); i++ )
         {
             for (int j = 0; j < c.getHeightPNG(); j++ )
             {
                 img.setRGB(i, j, points[i][j]);
+                img2.setRGB(i, j, points2[i][j]);
             }
         }
         long finish = System.currentTimeMillis();
         int diff = (int) (finish - start);
         System.out.println("drawn during      " + diff + " milliseconds");
-        File f = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile.png");
+        File f = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_J.png");
         ImageIO.write(img, "PNG", f);
-
+        File f2 = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_M.png");
+        ImageIO.write(img2, "PNG", f2);
         primaryStage.show();
     }
 

@@ -2,9 +2,6 @@ package model;
 
 import controller.Controller;
 
-import java.util.concurrent.RecursiveTask;
-
-
 public class Fractal
 {
     private Complex constant;
@@ -18,6 +15,7 @@ public class Fractal
    // private Initialisable.ColorScheme color;
 
     private double EPSILON;
+    private double EPSILON1;
     private Controller controller;
     private int[][] points;
     private double raduis;
@@ -46,8 +44,8 @@ public class Fractal
             }
         }
 
-       // EPSILON = controller.getRadius()/(double)size;
         EPSILON = controller.getRadius()/(double)size;
+        EPSILON1 = controller.getRadius()/(double)size;
         System.out.println("epsilon       = " + EPSILON);
         maxIt = controller.getMAX_ITER();
         System.out.println("max iteration = " + maxIt);
@@ -57,15 +55,12 @@ public class Fractal
 
     public int[][] divergence_Julia()
     {
-        //Complex z = Complex.createComplex(0, 0);
         double d_size = (double)size/2.0;
-        for (double i = -1.0; i < 1.0; i += EPSILON)
+        for (double i = -1.0; i < 1.0; i += EPSILON1)
         {
-            for (double j = -1.0; j < 1.0; j += EPSILON)
+            for (double j = -1.0; j < 1.0; j += EPSILON1)
             {
                 int iter = 0;
-               // z.setRe(i);
-               // z.setIm(j);
                 Complex z = Complex.createComplex(i, j);
                 while (z.mod() < raduis && iter < maxIt)
                 {
@@ -89,13 +84,13 @@ public class Fractal
 
     public int[][] divergence_Mandelbrot()
     {
-        Complex z = Complex.createComplex(0, 0);
         double d_size = (double)size/2.0;
         for (double i = -1.0; i < 1.0; i += EPSILON)
         {
             for (double j = -1.0; j < 1.0; j += EPSILON)
             {
                 int iter = 0;
+                Complex z = Complex.createComplex(0, 0);
                 Complex c = Complex.createComplex(i, j);
                 while (z.mod() < raduis && iter < maxIt)
                 {
@@ -116,5 +111,7 @@ public class Fractal
         }
         return points;
     }
+
+
     
 }
