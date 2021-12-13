@@ -2,8 +2,8 @@ package model;
 
 public final class Complex
 {
-    private final double re;
-    private final double im;
+    private double re;
+    private double im;
     private static final Complex ZERO = new Complex(0, 0);
     private static final Complex ONE = new Complex(1, 0) ;
     private static final Complex I = new Complex(0, 1);
@@ -28,6 +28,10 @@ public final class Complex
 
     public double realPart() { return re; }
 
+    public void setIm (double i) { im = i;}
+
+    public void setRe (double i) { re = i;}
+
     public double imaginaryPart() { return im; }
 
     public Complex plus(Complex c) { return new Complex(re + c.re, im + c.im); }
@@ -41,6 +45,8 @@ public final class Complex
         double tmp = c.re * c.re + c.im * c.im;
         return new Complex((re * c.re + im * c.im) / tmp, (im * c.re - re * c.im) / tmp);
     }
+
+    public double mod() { return Math.sqrt(re * re + im * im); }
 
     //============= Others ======================)
     @Override

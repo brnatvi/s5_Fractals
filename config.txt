@@ -1,0 +1,12 @@
+
+
+func=QUADRATIC
+fract=JULIA
+color=BLUE
+constant=—0.74543;0.11301i
+coefficient=
+countThreads=1
+timeOfExecution=y
+pathFile=
+widthPNG=
+lengthPNG=
