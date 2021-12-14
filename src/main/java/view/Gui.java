@@ -38,13 +38,13 @@ public class Gui extends Application
         long fin2 = System.currentTimeMillis();
         int d2 = (int) ((fin2 - st2)/1000);
         System.out.println("calculated during " + d2 + " seconds");
-
-        BufferedImage img = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
-        BufferedImage img2 = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        int w = c.getWidthPNG();
+        BufferedImage img = new BufferedImage(w, w/2, BufferedImage.TYPE_INT_RGB );
+        BufferedImage img2 = new BufferedImage(w, w/2, BufferedImage.TYPE_INT_RGB );
         long start = System.currentTimeMillis();
-        for ( int i = 0; i < c.getWidthPNG(); i++ )
+        for ( int i = 0; i < w; i++ )
         {
-            for (int j = 0; j < c.getHeightPNG(); j++ )
+            for (int j = 0; j < w/2; j++ )
             {
                 img.setRGB(i, j, points[i][j]);
                 img2.setRGB(i, j, points2[i][j]);

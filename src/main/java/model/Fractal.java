@@ -20,7 +20,8 @@ public class Fractal
     private int[][] points;
     private double raduis;
     private int maxIt;
-    private int size;
+    private int w;
+    private int h;
 
     public Fractal (Controller c)
     {
@@ -33,19 +34,20 @@ public class Fractal
       //  f = c.getFunction();
       //  fract = c.getTypeFractal();
       //  color = c.getColor();
-      size = controller.getWidthPNG();
+      w = controller.getWidthPNG();
+      h = w/2;
 
-        this.points = new int[size][size];
-        for (int i = 0; i < size; i++)
+        this.points = new int[w][h];
+        for (int i = 0; i < w; i++)
         {
-            for (int j = 0; j < size; j++)
+            for (int j = 0; j < h; j++)
             {
                 this.points[i][j] = 0;
             }
         }
 
-        EPSILON = controller.getRadius()/(double)size;
-        EPSILON1 = controller.getRadius()/(double)size;
+        EPSILON = controller.getRadius()/(double)w;
+        EPSILON1 = controller.getRadius()/(double)w;
         System.out.println("epsilon       = " + EPSILON);
         maxIt = controller.getMAX_ITER();
         System.out.println("max iteration = " + maxIt);
@@ -53,12 +55,20 @@ public class Fractal
         System.out.println("radius        = " + raduis);
     }
 
+
     public int[][] divergence_Julia()
     {
-        double d_size = (double)size/2.0;
-        for (double i = -1.0; i < 1.0; i += EPSILON1)
+        double left = -2.0;
+        double rigth = - left;
+        double up = rigth/2;
+        double down = - up;
+        double eps = Math.abs(left)/(double)w;
+
+        double d_w = (double)w/(2*Math.abs(left));
+        double d_h = (double)h/(2*Math.abs(up));
+        for (double i = left; i < rigth; i += eps)
         {
-            for (double j = -1.0; j < 1.0; j += EPSILON1)
+            for (double j = down; j < up; j += eps)
             {
                 int iter = 0;
                 Complex z = Complex.createComplex(i, j);
@@ -76,7 +86,7 @@ public class Fractal
                 {
                     colorB = 255;
                 }
-                points[(int)((i+1.0)*d_size)][(int)((j+1.0)*d_size)] = (colorR << 16) | (colorG << 8) | colorB;
+                points[(int)((i+Math.abs(left))*d_w)][(int)((j+Math.abs(up))*d_h)] = (colorR << 16) | (colorG << 8) | colorB;
             }
         }
         return points;
@@ -84,8 +94,9 @@ public class Fractal
 
     public int[][] divergence_Mandelbrot()
     {
-        double d_size = (double)size/2.0;
-        for (double i = -1.0; i < 1.0; i += EPSILON)
+        double d_w = (double)w/4.0;
+        double d_h = (double)h/2.0;
+        for (double i = -2.0; i < 2.0; i += EPSILON)
         {
             for (double j = -1.0; j < 1.0; j += EPSILON)
             {
@@ -106,7 +117,7 @@ public class Fractal
                 {
                     colorB = 0;
                 }
-                points[(int)((i+1.0)*d_size)][(int)((j+1.0)*d_size)] = (colorR << 16) | (colorG << 8) | colorB;
+                points[(int)((i+2.0)*d_w)][(int)((j+1.0)*d_h)] = (colorR << 16) | (colorG << 8) | colorB;
             }
         }
         return points;

@@ -14,7 +14,7 @@ public class Controller
     {
         constant = Complex.createComplex(-0.74543, 0.11301);
         widthPNG = 4000;
-        heightPNG = 4000;
+        heightPNG = widthPNG/2;
         MAX_ITER = 1000;
         RADIUS = 2.0;
     }
@@ -36,7 +36,6 @@ public class Controller
   //  public long getTime()               { return timeOfExecution; }
   //  public String getPath()             { return pathFile; }
     public int getWidthPNG()           { return widthPNG; }
-    public int getHeightPNG()          { return heightPNG; }
     public int getMAX_ITER()          { return MAX_ITER; }
     public double getRadius()          { return RADIUS; }
 
@@ -49,5 +48,5 @@ public class Controller
   //  public void setTime(long t)                             { timeOfExecution = t; }
   //  public void setPath(String p)                           { pathFile = p; }
     public void setWidthPNG(int w)                         { widthPNG = w; }
-    public void setHeightPNG(int l)                        { heightPNG = l; }
+    
 }

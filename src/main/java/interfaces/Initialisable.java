@@ -18,7 +18,6 @@ public interface Initialisable
     public long getTime();
     public String getPath();
     public long getWidthPNG();
-    public long getLengthPNG();
 
     public void setFunction(Initialisable.TypeFunction f);
     public void setTypeFractal(Initialisable.TypeFractal f);
@@ -30,6 +29,5 @@ public interface Initialisable
     public void setTime(long t);
     public void setPath(String path);
     public void setWidthPNG(long w);
-    public void setLengthPNG(long l);
-
+  
 }
