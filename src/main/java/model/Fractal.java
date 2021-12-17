@@ -2,127 +2,45 @@ package model;
 
 import controller.Controller;
 
-public class Fractal
+import java.awt.geom.Rectangle2D;
+import java.util.function.BiFunction;
+
+public abstract class Fractal implements interfaces.Calculable
 {
-    private Complex constant;
-   // private double coefficient;
-   // private int countThreads;
-   // private long timeOfExecution;
-   // private String pathFile;
-   //
-   // private Initialisable.TypeFunction f;
-   // private Initialisable.TypeFractal fract;
-   // private Initialisable.ColorScheme color;
+    protected Complex    constant;
+    protected Controller controller;
+    protected int[]      points;
+    protected double     radius;
+    protected int        maxIt;
+    protected int        widthPNG;
+    protected int        heightPNG;
+    protected double     coefficient;
+    protected double     left;
+    protected double     right;
+    protected double     up;
+    protected double     down;
+    protected BiFunction calc;
+    protected BiFunction paint;
 
-    private double EPSILON;
-    private double EPSILON1;
-    private Controller controller;
-    private int[][] points;
-    private double raduis;
-    private int maxIt;
-    private int w;
-    private int h;
-
-    public Fractal (Controller c)
+    public Fractal(Controller c)
     {
-        this.controller = c;
+        controller = c;
+        Rectangle2D.Double r = controller.getComplexRect();
+
+        calc = controller.getFractalFunction();
+        paint = controller.getColorFunction();
         constant = controller.getConstant();
-      //  coefficient = c.getCoeff();
-      //  countThreads = c.getCountThreads();
-      //  timeOfExecution = c.getTime();
-      //  pathFile = c.getPath();
-      //  f = c.getFunction();
-      //  fract = c.getTypeFractal();
-      //  color = c.getColor();
-      w = controller.getWidthPNG();
-      h = w/2;
+        coefficient = controller.getCoeff();
+        widthPNG = controller.getWidthPNG();
+        heightPNG = controller.getHeightPNG();
+        maxIt = controller.getMaxIter();
+        radius = controller.getRadius();
 
-        this.points = new int[w][h];
-        for (int i = 0; i < w; i++)
-        {
-            for (int j = 0; j < h; j++)
-            {
-                this.points[i][j] = 0;
-            }
-        }
+        left = r.x;
+        right = r.x + r.width;
+        down = r.y;
+        up = r.y + r.height;
 
-        EPSILON = controller.getRadius()/(double)w;
-        EPSILON1 = controller.getRadius()/(double)w;
-        System.out.println("epsilon       = " + EPSILON);
-        maxIt = controller.getMAX_ITER();
-        System.out.println("max iteration = " + maxIt);
-        raduis = controller.getRadius();
-        System.out.println("radius        = " + raduis);
+        points = new int[widthPNG * heightPNG];
     }
-
-
-    public int[][] divergence_Julia()
-    {
-        double left = -2.0;
-        double rigth = - left;
-        double up = rigth/2;
-        double down = - up;
-        double eps = Math.abs(left)/(double)w;
-
-        double d_w = (double)w/(2*Math.abs(left));
-        double d_h = (double)h/(2*Math.abs(up));
-        for (double i = left; i < rigth; i += eps)
-        {
-            for (double j = down; j < up; j += eps)
-            {
-                int iter = 0;
-                Complex z = Complex.createComplex(i, j);
-                while (z.mod() < raduis && iter < maxIt)
-                {
-                    z = z.times(z).plus(constant);
-                    iter++;
-                }
-
-                double val = (double)(iter) / (double)(maxIt);
-                int colorR = (int)(1251.0 * val);                                     // color interpretation
-                int colorG = (int)(4567.0 * (1.0-val));
-                int colorB = (int)(1852.0 * (z.mod() / raduis));
-                if ((z.mod() / raduis) > 1.0)
-                {
-                    colorB = 255;
-                }
-                points[(int)((i+Math.abs(left))*d_w)][(int)((j+Math.abs(up))*d_h)] = (colorR << 16) | (colorG << 8) | colorB;
-            }
-        }
-        return points;
-    }
-
-    public int[][] divergence_Mandelbrot()
-    {
-        double d_w = (double)w/4.0;
-        double d_h = (double)h/2.0;
-        for (double i = -2.0; i < 2.0; i += EPSILON)
-        {
-            for (double j = -1.0; j < 1.0; j += EPSILON)
-            {
-                int iter = 0;
-                Complex z = Complex.createComplex(0, 0);
-                Complex c = Complex.createComplex(i, j);
-                while (z.mod() < raduis && iter < maxIt)
-                {
-                    z = z.times(z).plus(c);
-                    iter++;
-                }
-
-                double val = (double)(iter) / (double)(maxIt);
-                int colorR = (int)(255.0 * val);                                     // color interpretation
-                int colorG = (int)(255.0 * (1.0-val));
-                int colorB = (int)(255.0 * (z.mod() / raduis));
-                if ((z.mod() / raduis) > 1.0)
-                {
-                    colorB = 0;
-                }
-                points[(int)((i+2.0)*d_w)][(int)((j+1.0)*d_h)] = (colorR << 16) | (colorG << 8) | colorB;
-            }
-        }
-        return points;
-    }
-
-
-    
 }

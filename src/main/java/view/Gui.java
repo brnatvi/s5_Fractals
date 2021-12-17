@@ -1,17 +1,17 @@
 package view;
 
 import controller.Controller;
+import interfaces.Calculable;
+import interfaces.Initialisable;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.Fractal;
-
+import model.FractalFactory;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 
 public class Gui extends Application
 {
@@ -24,39 +24,45 @@ public class Gui extends Application
         primaryStage.setScene(sc);
 
         Controller c = new Controller();
-        Fractal fr = new Fractal(c);
-        Fractal fr2 = new Fractal(c);
+        FractalFactory f = new FractalFactory(c);
+
+        c.setTypeFractal(Initialisable.TypeFractal.JULIA);
+        Calculable frJulia = f.create();
+
+
+        c.setTypeFractal(Initialisable.TypeFractal.MANDELBROT);
+        Calculable frMandelbrot = f.create();
 
         long st = System.currentTimeMillis();
-        int[][] points = fr.divergence_Julia();
+        
+        int[] pointsJ = frJulia.calculate();
+
         long fin = System.currentTimeMillis();
         int d = (int) ((fin - st)/1000);
         System.out.println("calculated during " + d + " seconds");
 
         long st2 = System.currentTimeMillis();
-        int[][] points2 = fr2.divergence_Mandelbrot();
+
+        int[] pointsM = frMandelbrot.calculate();
+
         long fin2 = System.currentTimeMillis();
         int d2 = (int) ((fin2 - st2)/1000);
         System.out.println("calculated during " + d2 + " seconds");
-        int w = c.getWidthPNG();
-        BufferedImage img = new BufferedImage(w, w/2, BufferedImage.TYPE_INT_RGB );
-        BufferedImage img2 = new BufferedImage(w, w/2, BufferedImage.TYPE_INT_RGB );
+
+        BufferedImage imgJ = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        BufferedImage imgM = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
         long start = System.currentTimeMillis();
-        for ( int i = 0; i < w; i++ )
-        {
-            for (int j = 0; j < w/2; j++ )
-            {
-                img.setRGB(i, j, points[i][j]);
-                img2.setRGB(i, j, points2[i][j]);
-            }
-        }
+
+        imgJ.setRGB(0,0,c.getWidthPNG(),c.getHeightPNG(), pointsJ, 0, c.getWidthPNG());
+        imgM.setRGB(0,0,c.getWidthPNG(),c.getHeightPNG(), pointsM, 0, c.getWidthPNG());
+
         long finish = System.currentTimeMillis();
         int diff = (int) (finish - start);
         System.out.println("drawn during      " + diff + " milliseconds");
-        File f = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_J.png");
-        ImageIO.write(img, "PNG", f);
-        File f2 = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_M.png");
-        ImageIO.write(img2, "PNG", f2);
+        File fileJulia = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_J.png");
+        ImageIO.write(imgJ, "PNG", fileJulia);
+        File fileMandelbrot = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_M.png");
+        ImageIO.write(imgM, "PNG", fileMandelbrot);
         primaryStage.show();
     }
 

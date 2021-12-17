@@ -23,7 +23,7 @@ public class Cli
                     case "--type":        // type of fractal
                         break;
 
-                    case "--t":            // time
+                    case "--t":            // time  GUI - field
                         break;
 
                     case "--color":        // color
@@ -35,7 +35,7 @@ public class Cli
                     case "--f":            // function
                         break;
 
-                    case "--c":            // constant
+                    case "--c":            // constant  GUI - field
                         break;
 
                     case "--n":            // number of threads
