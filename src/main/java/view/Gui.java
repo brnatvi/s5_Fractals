@@ -18,7 +18,7 @@ public class Gui extends Application
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/sample2.fxml"));
         primaryStage.setTitle("Fractals");
         Scene sc = new Scene(root, 1000, 600);
         primaryStage.setScene(sc);
