@@ -1,29 +1,39 @@
 package view;
 
 import controller.Controller;
-import interfaces.Calculable;
-import interfaces.Initialisable;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.FractalFactory;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import javafx.scene.image.Image;
 
 public class Gui extends Application
 {
+    private static GuiController controllerMain;
+
     @Override
     public void start(Stage primaryStage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("My window");
-        Scene sc = new Scene(root, 400, 400);
+        FXMLLoader loader = new FXMLLoader(Gui.class.getResource("/mainWindow.fxml"));
+        Parent root = loader.load();
+        primaryStage.setTitle("Fractals");
+
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+
+        Scene sc = new Scene(root, 1000, 600);
         primaryStage.setScene(sc);
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
 
         Controller c = new Controller();
+
+        GuiController controller = loader.getController();
+        controller.setFractalController(c);
+        controller.setStage(primaryStage);
+
+
+        /*
         FractalFactory f = new FractalFactory(c);
 
         c.setTypeFractal(Initialisable.TypeFractal.JULIA);
@@ -63,6 +73,9 @@ public class Gui extends Application
         ImageIO.write(imgJ, "PNG", fileJulia);
         File fileMandelbrot = new File("/home/nata/Documents/L3_Project_POO_JavaFx/MyFile_M.png");
         ImageIO.write(imgM, "PNG", fileMandelbrot);
+         */
+
+
         primaryStage.show();
     }
 

@@ -14,7 +14,7 @@ public final class Complex
         this.im = im;
     }
 
-    //============= Static fabrics ======================)
+    //============= Static fabrics ======================
 
     public static Complex createComplex(double re, double im) { return new Complex(re, im); }
 
@@ -24,7 +24,31 @@ public final class Complex
 
     public static Complex getI() { return I; }
 
-    //============= Math operations ======================)
+    public static Complex fromString(String str)
+    {
+        String[] reIm = str.split(";");
+        if (reIm.length != 2)
+        {
+            System.out.println("Wrong input: not two floating point numbers : " + str);
+            System.exit(-1);
+        }
+        else
+        {
+            try
+            {
+                double re = Double.parseDouble(reIm[0]);
+                double im = Double.parseDouble(reIm[1]);
+                return Complex.createComplex(re, im);
+            } catch (NumberFormatException e)
+            {
+                System.out.println("Wrong input: unexpected value of constant : " + str);
+                System.exit(-1);
+            }
+        }
+        return null;
+    }
+
+    //============= Math operations ======================
 
     public double realPart() { return re; }
 
@@ -44,7 +68,7 @@ public final class Complex
 
     public double mod() { return Math.sqrt(re * re + im * im); }
 
-    //============= Others ======================)
+    //============= Others ======================
     @Override
     public boolean equals(Object o)
     {
@@ -53,4 +77,11 @@ public final class Complex
         Complex c = (Complex) o;
         return (Double.compare(c.re, this.re) == 0 && Double.compare(c.im, this.im) == 0);
     }
+
+    @Override
+    public String toString()
+    {
+        return (re + ";" + im);
+    }
+
 }

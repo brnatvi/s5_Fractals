@@ -14,11 +14,11 @@ public class FractalFactory
     {
         if (controller.getTypeFractal() == Initialisable.TypeFractal.JULIA)
         {
-            return new FractalJulia(controller);
+            return (Calculable) new FractalJulia(controller);
         }
         else if (controller.getTypeFractal() == Initialisable.TypeFractal.MANDELBROT)
         {
-            return new FractalMandelbrot(controller);
+            return (Calculable) new FractalMandelbrot(controller);
         }
         else
         {

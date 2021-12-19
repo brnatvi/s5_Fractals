@@ -4,6 +4,8 @@ import interfaces.Initialisable;
 import model.Complex;
 
 import java.awt.geom.Rectangle2D;
+import java.io.*;
+import java.util.Properties;
 import java.util.function.BiFunction;
 
 public class Controller implements Initialisable
@@ -40,6 +42,71 @@ public class Controller implements Initialisable
         RADIUS = 2.0;
         complexRect = new Rectangle2D.Double(-2.0, -1.0, 4.0, 2.0);
         countThreads = Runtime.getRuntime().availableProcessors();
+        pathFile = "MyFractal";
+    }
+
+    public boolean exportSettings(String fileName)
+    {
+        try (OutputStream output = new FileOutputStream(fileName))
+        {
+            Properties prop = new Properties();
+            prop.setProperty("constant", constant.toString());
+
+            prop.setProperty("coefficient", Double.toString(coefficient));
+            prop.setProperty("func", func.toString());
+            prop.setProperty("fract", fract.toString());
+            prop.setProperty("color", color.toString());
+            prop.setProperty("countThreads", Integer.toString(countThreads));
+            prop.setProperty("MAX_ITER", Integer.toString(MAX_ITER));
+            prop.setProperty("RADIUS", Double.toString(RADIUS));
+            prop.setProperty("widthPNG", Integer.toString(widthPNG));
+            prop.setProperty("heightPNG", Integer.toString(heightPNG));
+            prop.setProperty("complexRect",
+                             Double.toString(complexRect.x) + ":" +
+                             Double.toString(complexRect.y) + ":" +
+                             Double.toString(complexRect.width) + ":" +
+                             Double.toString(complexRect.height)
+                             );
+
+            prop.store(output, null);
+            return true;
+        }
+        catch (IOException io)
+        {
+            return false;
+        }
+    }
+
+    public boolean importSettings(String fileName)
+    {
+        try (InputStream input = new FileInputStream(fileName))
+        {
+            Properties prop = new Properties();
+            prop.load(input);
+
+            constant    = Complex.fromString(prop.getProperty("constant"));
+            coefficient = Double.valueOf(prop.getProperty("coefficient"));
+            func        = Initialisable.TypeFunction.valueOf(prop.getProperty("func"));
+            fract       = Initialisable.TypeFractal.valueOf(prop.getProperty("fract"));
+            color       = Initialisable.ColorScheme.valueOf(prop.getProperty("color"));
+            countThreads= Integer.valueOf(prop.getProperty("countThreads"));
+            MAX_ITER    = Integer.valueOf(prop.getProperty("MAX_ITER"));
+            RADIUS      = Double.valueOf(prop.getProperty("RADIUS"));
+            widthPNG    = Integer.valueOf(prop.getProperty("widthPNG"));
+            heightPNG   = Integer.valueOf(prop.getProperty("heightPNG"));
+
+            String[] complexVals = prop.getProperty("complexRect").split(":");
+
+            complexRect.x      = Double.valueOf(complexVals[0]);
+            complexRect.y      = Double.valueOf(complexVals[1]);
+            complexRect.width  = Double.valueOf(complexVals[2]);
+            complexRect.height = Double.valueOf(complexVals[3]);
+
+            return true;
+        } catch (IOException ex)
+        {
+            return false;
+        }
     }
 
     public BiFunction getFractalFunction()
@@ -63,7 +130,15 @@ public class Controller implements Initialisable
         switch (color)
         {
             case RED:
+                ret = (val, zMod) -> (int)(4280*(Math.sin(val+600))+700) << 16 |
+                                     (int) (2056*((Math.sin(val+600))+700)) << 8 |
+                                     (int) (1800 *(Math.sin(val+600))+700);
+                break;
             case GREEN:
+                ret = (val, zMod) -> (int)(5208 * (zMod > RADIUS ? 1.0 : zMod / RADIUS)) << 16 |
+                                     (int)(4280*(Math.sin(val+600))+8508) << 8 |
+                                     (int) (1697 *(Math.sin(val+160))+333);
+                break;
             case BLUE:
                 ret = (val, zMod) -> ((int)(5855.0 * (val)) << 16) |
                                        ((int)(3658.0 * (1-val)) << 8) |
