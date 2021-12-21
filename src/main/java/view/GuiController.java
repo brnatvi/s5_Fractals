@@ -107,7 +107,7 @@ public class GuiController
         menu8Th.setOnAction                  (e -> controller.setCountThreads(8));
         menu16Th.setOnAction                 (e -> controller.setCountThreads(16));
         menuOptimumTh.setOnAction            (e -> controller.setCountThreads(Runtime.getRuntime().availableProcessors()));
-        taConsole.textProperty().addListener (e -> taConsole.setScrollTop(Double.MAX_VALUE));
+        taConsole.textProperty().addListener (e -> taConsole.setScrollTop(0));
 
         ivFractal.setOnScroll(e -> {
             double zoomFactor = 0;
@@ -207,7 +207,7 @@ public class GuiController
 
                 if(controller.isControllerChanged())
                 {
-                    taConsole.appendText(dtf.format(LocalDateTime.now()) +
+                    taConsole.insertText(0,"\n" + dtf.format(LocalDateTime.now()) +
                             " Start fractal calculation with new parameters\n");
                     timeStart = System.currentTimeMillis();
                     taskAggregator = new FractalTaskAgregator(factory, controller);
@@ -226,13 +226,13 @@ public class GuiController
 
                 if(controller.isControllerChanged())
                 {
-                    taConsole.appendText("\n" + dtf.format(LocalDateTime.now()) + " aborting current calculation\n");
+                    taConsole.insertText(0, "\n" + dtf.format(LocalDateTime.now()) + " Aborting current calculation\n");
                     controller.setAbort(true);
                     taskAggregator.join();
                     controller.setAbort(false);
 
                     timeStart = System.currentTimeMillis();
-                    taConsole.appendText(dtf.format(LocalDateTime.now()) +
+                    taConsole.insertText(0,"\n" + dtf.format(LocalDateTime.now()) +
                             " Restarting\n");
                     taskAggregator = new FractalTaskAgregator(factory, controller);
                     forkJoinPool = new ForkJoinPool(controller.getCountThreads(),
@@ -245,7 +245,7 @@ public class GuiController
                 {
                     if (forkJoinPool.isQuiescent())
                     {
-                        taConsole.appendText(dtf.format(LocalDateTime.now()) +
+                        taConsole.insertText(0, "\n" + dtf.format(LocalDateTime.now()) +
                                 " Calculation is finished (processing time " + String.valueOf(System.currentTimeMillis() - timeStart) + " ms)\n");
                         int[] result = taskAggregator.join();
 
@@ -263,7 +263,7 @@ public class GuiController
                     }
                     else
                     {
-                        taConsole.appendText(".\n");
+                        taConsole.insertText(0, ".");
                     }
                 }
             }
