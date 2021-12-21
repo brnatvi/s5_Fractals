@@ -29,6 +29,7 @@ public class Controller implements Initialisable
     private Rectangle2D.Double complexRect;
     private AtomicBoolean abortCalculation;
 
+    //============================== Constructor ================================
     public Controller()
     {
         isChanged = false;
@@ -51,6 +52,7 @@ public class Controller implements Initialisable
         abortCalculation.set(false);
     }
 
+    //============================ Others ==================================
     public boolean isControllerChanged()
     {
         boolean tmp = isChanged;
@@ -122,6 +124,8 @@ public class Controller implements Initialisable
         }
     }
 
+    //======================== Lambda's getters ============================
+
     public BiFunction getFractalFunction()
     {
         BiFunction<Complex, Complex, Complex> ret = null;
@@ -161,10 +165,14 @@ public class Controller implements Initialisable
         return ret;
     }
 
+    //============================ Getters ================================
+
     public Initialisable.TypeFunction        getFunctionType()        { return func; }
     public Initialisable.TypeFractal         getTypeFractal()         { return fract; }
     public Initialisable.ColorScheme         getColorScheme()         { return color; }
     public Complex                           getConstant()            { return constant; }
+    public double                            getRe()                  { return constant.realPart(); }
+    public double                            getIm()                  { return constant.imaginaryPart(); }
     public int                               getMaxIter()             { return MAX_ITER; }
     public double                            getCoeff()               { return coefficient; }
     public int                               getCountThreads()        { return countThreads; }
@@ -176,6 +184,8 @@ public class Controller implements Initialisable
     public Rectangle2D.Double                getComplexRect()         { return complexRect; }
     public boolean                           getAbort()               { return abortCalculation.get();}
 
+    //============================ Setters ==============================
+
     public void         setFunctionType(Initialisable.TypeFunction f) { isChanged = true; func = f; }
     public void         setFractalType(Initialisable.TypeFractal f)   { isChanged = true; fract = f; }
     public void         setColorScheme(Initialisable.ColorScheme c)   { isChanged = true; color = c; }
@@ -185,12 +195,17 @@ public class Controller implements Initialisable
     public void         setCountThreads(int th)                       { isChanged = true; countThreads = th; }
     public void         setIsDisplayTime(boolean t)                   { isChanged = true; isTimeDisplayed = t;}
     public void         setPath(String p)                             { isChanged = true; pathFile = p; }
-    public void         setWidthPNG(int w)                            { isChanged = true; widthPNG = w; }
-    public void         setHeightPNG(int w)                           { isChanged = true; heightPNG = w; }
     public void         setRadius(double r)                           { isChanged = true; RADIUS = r; }
     public void         setComplexRect(Rectangle2D.Double r)          { isChanged = true; complexRect = r;}
     public void         setAbort(boolean a)                           { abortCalculation.set(a);}
     public void         setNewRealPart(double r)                      { isChanged = true; constant = Complex.createComplex(r, im);}
     public void         setNewImagPart(double i)                      { isChanged = true; constant = Complex.createComplex(re, i);}
 
+    public void setSize(int w, int h)
+    {
+        isChanged = true;
+        widthPNG = w;
+        heightPNG = h;
+        complexRect.height = complexRect.width * (double)h/(double)w;
+    }
 }

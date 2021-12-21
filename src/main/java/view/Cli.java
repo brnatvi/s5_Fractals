@@ -1,7 +1,6 @@
 package view;
 
 import controller.Controller;
-import interfaces.Calculable;
 import interfaces.Initialisable;
 import model.Complex;
 import model.FractalFactory;
@@ -22,6 +21,7 @@ public class Cli
     private Parser parser = null;
     private Report report = null;
 
+    //============================ Constructor ==============================
     public Cli(String[] args)
     {
         for (String arg : args)
@@ -49,6 +49,7 @@ public class Cli
         }
     }
 
+    //=========================== Inner classes ==============================
     private class Parser
     {
         private Controller controller = null;
@@ -178,6 +179,33 @@ public class Cli
                     case "save":                                              // save to file
                         controller.setPath(v);
                         break;
+
+                    case "size":                                               // type of fractal
+                        String[] size = v.split("x");
+                        if (size.length != 2)
+                        {
+                            System.out.println("Wrong input: not two numbers : " + size);
+                            System.exit(-1);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                int w = Integer.parseInt(size[0]);
+                                int h = Integer.parseInt(size[1]);
+                                if ((w <= 16) || (h <= 16))
+                                {
+                                    System.out.println("Wrong input: unsupported image size : " + size);
+                                    System.exit(-1);
+                                }
+                                controller.setSize(w, h);
+                            } catch (NumberFormatException e)
+                            {
+                                System.out.println("Wrong input: unexpected value of WxH : " + size);
+                                System.exit(-1);
+                            }
+                        }
+                        break;
                         
                     default:
                         System.out.println("Unknown argument: " + k + ", exit !");
@@ -221,6 +249,8 @@ public class Cli
         }
     }
 
+    //============================ Lambda's getters ==============================
+
     private void showHelp()
     {
         String message = "\nWelcome to fabulous world of fractals !!\n\n" +
@@ -235,6 +265,8 @@ public class Cli
                 " --it    - set maximum number of iterations \n" +
                 " --t     - show the time of execution ( Y/N )\n" +
                 " --n     - set number of threads to calculation, or <Opt> to set number of your PC's cores \n" +
+                " --size  - image size in pixels (WxH)\n" +
+                "           Example: 2000x1000 \n" +
                 " --load  - load fractal parameters by file path\n" +
                 "           Example: --load MyFile.fct\n" +
                 " --save  - save result png & config files by path file\n" +
@@ -248,7 +280,7 @@ public class Cli
                 " --help  - show this help\n\n" +
 
                 "Default parameters are:\n" +
-                " --type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt --it 1000\n" +
+                " --type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt --it 1000 --size 4000x2000\n" +
                 "and fractal is calculating for points included into rectangle x->[-2.0, 2.0] y->[-1.0, 1.0]\n\n";
 
         System.out.println(message);
@@ -261,7 +293,7 @@ public class Cli
 
         FractalFactory factory = new FractalFactory(controller);
 
-        FractalTaskAgregator TaskAgregator = new FractalTaskAgregator(factory);
+        FractalTaskAgregator TaskAgregator = new FractalTaskAgregator(factory, controller);
 
         ForkJoinPool forkJoinPool = new ForkJoinPool(controller.getCountThreads(),
                                                      ForkJoinPool.defaultForkJoinWorkerThreadFactory,
@@ -270,11 +302,14 @@ public class Cli
         forkJoinPool.execute(TaskAgregator);
         int[] points = TaskAgregator.join();
 
+        int width = TaskAgregator.getWidth();
+        int height = points.length / width;
+
         long finish1 = System.currentTimeMillis();
         report.timeOfCalc = (double)(finish1 - start1)/1000.0;
-        BufferedImage img = new BufferedImage(controller.getWidthPNG(), controller.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB );
         long start2 = System.currentTimeMillis();
-        img.setRGB(0,0, controller.getWidthPNG(), controller.getHeightPNG(), points, 0, controller.getWidthPNG());
+        img.setRGB(0,0, width, height, points, 0, width);
         long finish2 = System.currentTimeMillis();
         report.timeOfPaint = (finish2 - start2);
 
@@ -285,11 +320,11 @@ public class Cli
         System.out.println("Done");
     }
 
-
+    //============================ Main function ==============================
     public static void main(String[] args)
     {
         Cli cli = new Cli(args);
     }
 }
 
-//--type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt
+//--type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt --size 1000x400

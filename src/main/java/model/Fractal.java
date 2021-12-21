@@ -63,12 +63,12 @@ public abstract class Fractal implements interfaces.Calculable
         left = r.x;
         right = r.x + r.width;
         // take a slice
-        up = r.y + (nbThread + 1)*(r.height/countThreads);
-        down = r.y + (nbThread)*(r.height/countThreads);
+        up = r.y + ((double)nbThread + 1.0)*(r.height/(double)countThreads);
+        down = r.y + (double)nbThread*(r.height/(double)countThreads);
 
 
         // take a slice
-        points = new int[widthPNG * heightPNG/countThreads];
+        points = new int[widthPNG * (heightPNG/countThreads)];
     }
 
 }

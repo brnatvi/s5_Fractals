@@ -37,8 +37,7 @@ public interface Initialisable
     public void     setCountThreads(int th);
     public void     setIsDisplayTime(boolean t);
     public void     setPath(String path);
-    public void     setWidthPNG(int w);
-    public void     setHeightPNG(int w);
     public void     setRadius(double r);
     public void     setComplexRect(Rectangle2D.Double r);
+    public void     setSize(int w, int h);
 }

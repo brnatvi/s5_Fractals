@@ -13,14 +13,14 @@ public class FractalMandelbrot extends Fractal
         double len = Math.abs(right - left);
         double haut = Math.abs(up - down);
         double epsW = len/(double)widthPNG;
-        double epsH = haut/(double) (heightPNG/ controller.getCountThreads());
+        double epsH = haut/ ((double)heightPNG/ (double)countThreads);
 
         double i = left - epsW;
         for (int IdxW = 0; IdxW < widthPNG; IdxW++)
         {
             i += epsW;
             double j = down - epsH;
-            for (int IdxH = 0; IdxH < heightPNG/controller.getCountThreads(); IdxH ++)
+            for (int IdxH = 0; IdxH < heightPNG/countThreads; IdxH ++)
             {
                 j += epsH;
                 int iter = 0;
