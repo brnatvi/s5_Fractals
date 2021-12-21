@@ -5,6 +5,7 @@ import interfaces.Calculable;
 import interfaces.Initialisable;
 import model.Complex;
 import model.FractalFactory;
+import model.FractalTaskAgregator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
 public class Cli
@@ -77,10 +79,10 @@ public class Cli
                     case "type":                                               // type of fractal
                         if (v.toLowerCase().equals("m"))
                         {
-                            controller.setTypeFractal(Initialisable.TypeFractal.MANDELBROT);
+                            controller.setFractalType(Initialisable.TypeFractal.MANDELBROT);
                         } else if (v.toLowerCase().equals("j"))
                         {
-                            controller.setTypeFractal(Initialisable.TypeFractal.JULIA);
+                            controller.setFractalType(Initialisable.TypeFractal.JULIA);
                         } else
                         {
                             System.out.println("Wrong input: unexpected type of fractal : " + v);
@@ -188,7 +190,7 @@ public class Cli
     private class Report
     {
         private Controller controller  = null;
-        private long       timeOfCalc  = 0;
+        private double     timeOfCalc  = 0;
         private long       timeOfPaint = 0;
 
         public Report(Controller c) {  controller = c; }
@@ -254,13 +256,22 @@ public class Cli
 
     private void launch() throws IOException
     {
-        Calculable fractal = new FractalFactory(controller).create();
         System.out.println("\nProcessing...\n");
         long start1 = System.currentTimeMillis();
-        int[] points = fractal.calculate();
-        long finish1 = System.currentTimeMillis();
-        report.timeOfCalc = (finish1 - start1)/1000;
 
+        FractalFactory factory = new FractalFactory(controller);
+
+        FractalTaskAgregator TaskAgregator = new FractalTaskAgregator(factory);
+
+        ForkJoinPool forkJoinPool = new ForkJoinPool(controller.getCountThreads(),
+                                                     ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+                                                     null,
+                                                     true);
+        forkJoinPool.execute(TaskAgregator);
+        int[] points = TaskAgregator.join();
+
+        long finish1 = System.currentTimeMillis();
+        report.timeOfCalc = (double)(finish1 - start1)/1000.0;
         BufferedImage img = new BufferedImage(controller.getWidthPNG(), controller.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
         long start2 = System.currentTimeMillis();
         img.setRGB(0,0, controller.getWidthPNG(), controller.getHeightPNG(), points, 0, controller.getWidthPNG());
@@ -281,4 +292,4 @@ public class Cli
     }
 }
 
-//--type J --color B --f Q --c -0.74543;0.11301 --t Y --n D
+//--type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt

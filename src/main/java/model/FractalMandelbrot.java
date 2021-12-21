@@ -6,19 +6,21 @@ public class FractalMandelbrot extends Fractal
 {
     public FractalMandelbrot(Controller c) { super(c); }
 
+    public FractalMandelbrot(Controller c, int nbThread) { super(c, nbThread); }
+
     public int[] calculate()
     {
         double len = Math.abs(right - left);
         double haut = Math.abs(up - down);
         double epsW = len/(double)widthPNG;
-        double epsH = haut/(double)heightPNG;
+        double epsH = haut/(double) (heightPNG/ controller.getCountThreads());
 
         double i = left - epsW;
         for (int IdxW = 0; IdxW < widthPNG; IdxW++)
         {
             i += epsW;
             double j = down - epsH;
-            for (int IdxH = 0; IdxH < heightPNG; IdxH ++)
+            for (int IdxH = 0; IdxH < heightPNG/controller.getCountThreads(); IdxH ++)
             {
                 j += epsH;
                 int iter = 0;
@@ -30,7 +32,12 @@ public class FractalMandelbrot extends Fractal
                     iter++;
                 }
                 double val = (double)iter/(double)maxIt;
-                points[IdxW + IdxH * widthPNG] = (int) paint.apply(val, z.mod());
+                points[IdxW + IdxH * widthPNG] = (int) paint.apply(val, z.mod()) | 0xFF000000;
+
+                if ((0 == (IdxH % 100)) && (controller.getAbort()))
+                {
+                    break;
+                }
             }
         }
         return points;

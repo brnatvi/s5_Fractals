@@ -29,7 +29,7 @@ public interface Initialisable
     public Rectangle2D.Double          getComplexRect();
 
     public void     setFunctionType(Initialisable.TypeFunction f);
-    public void     setTypeFractal(Initialisable.TypeFractal f);
+    public void setFractalType(Initialisable.TypeFractal f);
     public void     setColorScheme(Initialisable.ColorScheme c);
     public void     setConstant(Complex c);
     public void     setMaxIter(int maxIter);

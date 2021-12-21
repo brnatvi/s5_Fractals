@@ -2,16 +2,18 @@ package view;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+import javafx.stage.WindowEvent;
+
 
 public class Gui extends Application
 {
-    private static GuiController controllerMain;
-
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -26,21 +28,22 @@ public class Gui extends Application
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
 
-        Controller c = new Controller();
+        Controller controller = new Controller();
 
-        GuiController controller = loader.getController();
-        controller.setFractalController(c);
-        controller.setStage(primaryStage);
+        GuiController guiController = loader.getController();
+        guiController.setFractalController(controller);
+        guiController.setStage(primaryStage);
+
 
 
         /*
-        FractalFactory f = new FractalFactory(c);
+        FractalFactory f = new FractalFactory(controller);
 
-        c.setTypeFractal(Initialisable.TypeFractal.JULIA);
+        controller.setTypeFractal(Initialisable.TypeFractal.JULIA);
         Calculable frJulia = f.create();
 
 
-        c.setTypeFractal(Initialisable.TypeFractal.MANDELBROT);
+        controller.setTypeFractal(Initialisable.TypeFractal.MANDELBROT);
         Calculable frMandelbrot = f.create();
 
         long st = System.currentTimeMillis();
@@ -59,12 +62,12 @@ public class Gui extends Application
         int d2 = (int) ((fin2 - st2)/1000);
         System.out.println("calculated during " + d2 + " seconds");
 
-        BufferedImage imgJ = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
-        BufferedImage imgM = new BufferedImage(c.getWidthPNG(), c.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        BufferedImage imgJ = new BufferedImage(controller.getWidthPNG(), controller.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
+        BufferedImage imgM = new BufferedImage(controller.getWidthPNG(), controller.getHeightPNG(), BufferedImage.TYPE_INT_RGB );
         long start = System.currentTimeMillis();
 
-        imgJ.setRGB(0,0,c.getWidthPNG(),c.getHeightPNG(), pointsJ, 0, c.getWidthPNG());
-        imgM.setRGB(0,0,c.getWidthPNG(),c.getHeightPNG(), pointsM, 0, c.getWidthPNG());
+        imgJ.setRGB(0,0,controller.getWidthPNG(),controller.getHeightPNG(), pointsJ, 0, controller.getWidthPNG());
+        imgM.setRGB(0,0,controller.getWidthPNG(),controller.getHeightPNG(), pointsM, 0, controller.getWidthPNG());
 
         long finish = System.currentTimeMillis();
         int diff = (int) (finish - start);
@@ -77,11 +80,23 @@ public class Gui extends Application
 
 
         primaryStage.show();
+
+        
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                try
+                {
+                    Platform.exit();
+                    System.exit(0);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
-    public static void main(String[] args)
-    {
-        launch(args);
-    }
+    public static void main(String[] args) { launch(args); }
 }

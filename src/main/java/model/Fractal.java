@@ -21,6 +21,7 @@ public abstract class Fractal implements interfaces.Calculable
     protected double     down;
     protected BiFunction calc;
     protected BiFunction paint;
+    protected int        countThreads;
 
     public Fractal(Controller c)
     {
@@ -43,4 +44,31 @@ public abstract class Fractal implements interfaces.Calculable
 
         points = new int[widthPNG * heightPNG];
     }
+
+    public Fractal(Controller c, int nbThread)
+    {
+        controller = c;
+        Rectangle2D.Double r = controller.getComplexRect();
+
+        calc = controller.getFractalFunction();
+        paint = controller.getColorFunction();
+        constant = controller.getConstant();
+        coefficient = controller.getCoeff();
+        widthPNG = controller.getWidthPNG();
+        heightPNG = controller.getHeightPNG();
+        maxIt = controller.getMaxIter();
+        radius = controller.getRadius();
+        countThreads = controller.getCountThreads();
+
+        left = r.x;
+        right = r.x + r.width;
+        // take a slice
+        up = r.y + (nbThread + 1)*(r.height/countThreads);
+        down = r.y + (nbThread)*(r.height/countThreads);
+
+
+        // take a slice
+        points = new int[widthPNG * heightPNG/countThreads];
+    }
+
 }

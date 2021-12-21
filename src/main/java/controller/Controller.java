@@ -6,10 +6,12 @@ import model.Complex;
 import java.awt.geom.Rectangle2D;
 import java.io.*;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 
 public class Controller implements Initialisable
 {
+    private boolean isChanged;
     private Complex constant;
     private double re;
     private double im;
@@ -25,16 +27,18 @@ public class Controller implements Initialisable
     private int widthPNG;
     private int heightPNG;
     private Rectangle2D.Double complexRect;
+    private AtomicBoolean abortCalculation;
 
     public Controller()
     {
+        isChanged = false;
         re = -0.74543;
         im = 0.11301;
         constant = Complex.createComplex(re, im);
         coefficient = 1.0;
-        func = Initialisable.TypeFunction.QUADRATIC;
+        func  = Initialisable.TypeFunction.QUADRATIC;
         fract = Initialisable.TypeFractal.JULIA;
-        color =  Initialisable.ColorScheme.BLUE;
+        color = Initialisable.ColorScheme.BLUE;
         isTimeDisplayed = true;
         widthPNG = 4000;
         heightPNG = 2000;
@@ -43,6 +47,15 @@ public class Controller implements Initialisable
         complexRect = new Rectangle2D.Double(-2.0, -1.0, 4.0, 2.0);
         countThreads = Runtime.getRuntime().availableProcessors();
         pathFile = "MyFractal";
+        abortCalculation = new AtomicBoolean();
+        abortCalculation.set(false);
+    }
+
+    public boolean isControllerChanged()
+    {
+        boolean tmp = isChanged;
+        isChanged = false;
+        return tmp;
     }
 
     public boolean exportSettings(String fileName)
@@ -161,18 +174,23 @@ public class Controller implements Initialisable
     public int                               getHeightPNG()           { return heightPNG; }
     public double                            getRadius()              { return RADIUS; }
     public Rectangle2D.Double                getComplexRect()         { return complexRect; }
+    public boolean                           getAbort()               { return abortCalculation.get();}
 
-    public void         setFunctionType(Initialisable.TypeFunction f) { func = f; }
-    public void         setTypeFractal(Initialisable.TypeFractal f)   { fract = f; }
-    public void         setColorScheme(Initialisable.ColorScheme c)   { color = c; }
-    public void         setConstant(Complex c)                        { constant = c; }
-    public void         setMaxIter(int maxIter)                       { MAX_ITER = maxIter; }
-    public void         setCoeff(double c)                            { coefficient = c; }
-    public void         setCountThreads(int th)                       { countThreads = th; }
-    public void         setIsDisplayTime(boolean t)                   { isTimeDisplayed = t;}
-    public void         setPath(String p)                             { pathFile = p; }
-    public void         setWidthPNG(int w)                            { widthPNG = w; }
-    public void         setHeightPNG(int w)                           { heightPNG = w; }
-    public void         setRadius(double r)                           { RADIUS = r; }
-    public void         setComplexRect(Rectangle2D.Double r)          { complexRect = r;}
+    public void         setFunctionType(Initialisable.TypeFunction f) { isChanged = true; func = f; }
+    public void         setFractalType(Initialisable.TypeFractal f)   { isChanged = true; fract = f; }
+    public void         setColorScheme(Initialisable.ColorScheme c)   { isChanged = true; color = c; }
+    public void         setConstant(Complex c)                        { isChanged = true; constant = c; }
+    public void         setMaxIter(int maxIter)                       { isChanged = true; MAX_ITER = maxIter; }
+    public void         setCoeff(double c)                            { isChanged = true; coefficient = c; }
+    public void         setCountThreads(int th)                       { isChanged = true; countThreads = th; }
+    public void         setIsDisplayTime(boolean t)                   { isChanged = true; isTimeDisplayed = t;}
+    public void         setPath(String p)                             { isChanged = true; pathFile = p; }
+    public void         setWidthPNG(int w)                            { isChanged = true; widthPNG = w; }
+    public void         setHeightPNG(int w)                           { isChanged = true; heightPNG = w; }
+    public void         setRadius(double r)                           { isChanged = true; RADIUS = r; }
+    public void         setComplexRect(Rectangle2D.Double r)          { isChanged = true; complexRect = r;}
+    public void         setAbort(boolean a)                           { abortCalculation.set(a);}
+    public void         setNewRealPart(double r)                      { isChanged = true; constant = Complex.createComplex(r, im);}
+    public void         setNewImagPart(double i)                      { isChanged = true; constant = Complex.createComplex(re, i);}
+
 }
