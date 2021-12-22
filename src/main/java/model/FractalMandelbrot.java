@@ -4,7 +4,6 @@ import controller.Controller;
 
 public class FractalMandelbrot extends Fractal
 {
-    public FractalMandelbrot(Controller c) { super(c); }
 
     public FractalMandelbrot(Controller c, int nbThread) { super(c, nbThread); }
 

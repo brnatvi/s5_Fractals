@@ -14,7 +14,6 @@ public abstract class Fractal implements interfaces.Calculable
     protected int        maxIt;
     protected int        widthPNG;
     protected int        heightPNG;
-    protected double     coefficient;
     protected double     left;
     protected double     right;
     protected double     up;
@@ -27,11 +26,9 @@ public abstract class Fractal implements interfaces.Calculable
     {
         controller = c;
         Rectangle2D.Double r = controller.getComplexRect();
-
         calc = controller.getFractalFunction();
         paint = controller.getColorFunction();
         constant = controller.getConstant();
-        coefficient = controller.getCoeff();
         widthPNG = controller.getWidthPNG();
         heightPNG = controller.getHeightPNG();
         maxIt = controller.getMaxIter();
@@ -49,11 +46,9 @@ public abstract class Fractal implements interfaces.Calculable
     {
         controller = c;
         Rectangle2D.Double r = controller.getComplexRect();
-
         calc = controller.getFractalFunction();
         paint = controller.getColorFunction();
         constant = controller.getConstant();
-        coefficient = controller.getCoeff();
         widthPNG = controller.getWidthPNG();
         heightPNG = controller.getHeightPNG();
         maxIt = controller.getMaxIter();

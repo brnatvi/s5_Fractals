@@ -6,13 +6,13 @@ import interfaces.Calculable;
 import java.util.ArrayList;
 import java.util.concurrent.RecursiveTask;
 
-public class FractalTaskAgregator extends RecursiveTask<int[]>
+public class FractalTaskAggregator extends RecursiveTask<int[]>
 {
     private FractalFactory factory;
     private int width  = 0;
     private int height = 0;
 
-    public FractalTaskAgregator(FractalFactory f, Controller c)
+    public FractalTaskAggregator(FractalFactory f, Controller c)
     {
         this.factory = f;
         this.width  = c.getWidthPNG();

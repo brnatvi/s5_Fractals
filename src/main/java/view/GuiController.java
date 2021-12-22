@@ -10,10 +10,7 @@ import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.Pane;
@@ -22,10 +19,13 @@ import javafx.stage.Stage;
 
 import javafx.util.Duration;
 import model.FractalFactory;
-import model.FractalTaskAgregator;
+import model.FractalTaskAggregator;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ForkJoinPool;
@@ -58,13 +58,13 @@ public class GuiController
     private Stage                stage = null;
     private Controller           controller = null;
     private FractalFactory       factory = null;
-    private FractalTaskAgregator taskAggregator = null;
+    private FractalTaskAggregator taskAggregator = null;
     private ForkJoinPool         forkJoinPool = null;
     private DateTimeFormatter    dtf = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private double               startDragX = 0.0;
     private double               startDragY = 0.0;
     private long                 timeStart  = 0;
-   
+    private int[] copy;
 
     private enum enumDrawingState {IDLE, RUNNING};
     private enumDrawingState state = enumDrawingState.IDLE;
@@ -93,7 +93,15 @@ public class GuiController
     {
         menuExportConfig.setOnAction         (e -> exportConfig(e));
         menuImportConfig.setOnAction         (e -> importConfig(e));
-        menuSaveAsPNG.setOnAction            (e -> saveAsPNG(e));
+        menuSaveAsPNG.setOnAction            (e -> {
+            try
+            {
+                saveAsPNG(e);
+            } catch (IOException ioException)
+            {
+                ioException.printStackTrace();
+            }
+        });
         menuQuadratic.setOnAction            (e -> controller.setFunctionType(Initialisable.TypeFunction.QUADRATIC));
         menuCubic.setOnAction                (e -> controller.setFunctionType(Initialisable.TypeFunction.CUBIC));
         menuJulia.setOnAction                (e -> controller.setFractalType(Initialisable.TypeFractal.JULIA));
@@ -161,7 +169,7 @@ public class GuiController
                     controller.setMaxIter(val);
                 } catch (NumberFormatException ex)
                 {
-                    taConsole.appendText("Wrong input: unexpected value of max iterations\n");
+                    taConsole.insertText(0,"Wrong input: unexpected value of max iterations\n");
                 }
             }
         });
@@ -175,7 +183,7 @@ public class GuiController
                     controller.setNewRealPart(val);
                 } catch (NumberFormatException ex)
                 {
-                    taConsole.appendText("Wrong input: unexpected value of real part of constant\n");
+                    taConsole.insertText(0,"Wrong input: unexpected value of real part of constant\n");
                 }
             }
         });
@@ -189,7 +197,7 @@ public class GuiController
                     controller.setNewImagPart(val);
                 } catch (NumberFormatException ex)
                 {
-                    taConsole.appendText("Wrong input: unexpected value of imaginary part of constant\n");
+                    taConsole.insertText(0,"Wrong input: unexpected value of imaginary part of constant\n");
                 }
             }
         });
@@ -197,6 +205,17 @@ public class GuiController
 
     //============================ Thread management ==============================
 
+    /**
+     * {@summary Management of animation's thread.}
+     * <ul>
+     * <li> creation of Timeline
+     * <li> if this thread is running:
+     * <li> if this thread is idle:
+     * <li> defines optimal size of windows based on the screen size, min/max dimensions and resizability
+     * <li> sets onCloseRequest
+     * <li> shows
+     * </ul>
+     */
     private void display()
     {
         Timeline timer = new Timeline(new KeyFrame(Duration.millis(100), ev ->
@@ -210,7 +229,7 @@ public class GuiController
                     taConsole.insertText(0,"\n" + dtf.format(LocalDateTime.now()) +
                             " Start fractal calculation with new parameters\n");
                     timeStart = System.currentTimeMillis();
-                    taskAggregator = new FractalTaskAgregator(factory, controller);
+                    taskAggregator = new FractalTaskAggregator(factory, controller);
                     forkJoinPool  = new ForkJoinPool(controller.getCountThreads(),
                                                      ForkJoinPool.defaultForkJoinWorkerThreadFactory,
                                               null,
@@ -234,7 +253,7 @@ public class GuiController
                     timeStart = System.currentTimeMillis();
                     taConsole.insertText(0,"\n" + dtf.format(LocalDateTime.now()) +
                             " Restarting\n");
-                    taskAggregator = new FractalTaskAgregator(factory, controller);
+                    taskAggregator = new FractalTaskAggregator(factory, controller);
                     forkJoinPool = new ForkJoinPool(controller.getCountThreads(),
                                                     ForkJoinPool.defaultForkJoinWorkerThreadFactory,
                                              null,
@@ -248,6 +267,7 @@ public class GuiController
                         taConsole.insertText(0, "\n" + dtf.format(LocalDateTime.now()) +
                                 " Calculation is finished (processing time " + String.valueOf(System.currentTimeMillis() - timeStart) + " ms)\n");
                         int[] result = taskAggregator.join();
+                        copy = result;
 
                         int width = taskAggregator.getWidth();
                         int height = result.length / width;
@@ -316,13 +336,29 @@ public class GuiController
         setMenusAndFields();
     }
 
-    private void saveAsPNG(ActionEvent e)
+    private void saveAsPNG(ActionEvent e) throws IOException
     {
-
+        if (state == enumDrawingState.RUNNING)
+        {
+            taConsole.insertText(0,"Can't save file while processing. Please try later.\n");
+        }
+        else
+        {
+            int width = taskAggregator.getWidth();
+            int height = copy.length / width;
+            BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            img.setRGB(0, 0, width, height, copy, 0, width);
+            String name = controller.getPath() + ".png";
+            File file = new File(name);
+            ImageIO.write(img, "PNG", file);
+        }
     }
 
     //============================ Auxiliary functions ==============================
 
+    /**
+     * {@summary Initialisation of menus and fields after import.}
+     */
     private void setMenusAndFields()
     {
         tfMaxIter.setText(Integer.toString(controller.getMaxIter()));
@@ -410,6 +446,10 @@ public class GuiController
         }
     }
 
+    /**
+     * {@summary Function which check if the size of image was changed by user.}
+     *  In case of changing it change the size of Pane.
+     */
     private void updateSize()
     {
         if (       (((int) pnFractalView.getHeight()) != controller.getHeightPNG())

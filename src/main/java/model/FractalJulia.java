@@ -4,7 +4,6 @@ import controller.Controller;
 
 public class FractalJulia extends Fractal
 {
-    public FractalJulia(Controller c) { super(c); }
 
     public FractalJulia(Controller c, int nbThread) { super(c, nbThread); }
 
@@ -19,12 +18,10 @@ public class FractalJulia extends Fractal
         for (int IdxW = 0; IdxW < widthPNG; IdxW++)
         {
             i += epsW;
-            //System.out.println(i);
             double j = down - epsH;
             for (int IdxH = 0; IdxH < heightPNG/countThreads; IdxH++)
             {
                 j += epsH;
-                //System.out.println(j);
                 int iter = 0;
                 Complex z = Complex.createComplex(i, j);
                 while (z.mod() < radius && iter < maxIt - 1)

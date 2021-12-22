@@ -15,14 +15,13 @@ public class Controller implements Initialisable
     private Complex constant;
     private double re;
     private double im;
-    private double coefficient;
     private Initialisable.TypeFunction func;
     private Initialisable.TypeFractal fract;
     private Initialisable.ColorScheme color;
     private boolean isTimeDisplayed;
     private String pathFile;
     private int countThreads;
-    private int MAX_ITER;
+    private int maxIter;
     private double RADIUS;
     private int widthPNG;
     private int heightPNG;
@@ -36,14 +35,13 @@ public class Controller implements Initialisable
         re = -0.74543;
         im = 0.11301;
         constant = Complex.createComplex(re, im);
-        coefficient = 1.0;
         func  = Initialisable.TypeFunction.QUADRATIC;
         fract = Initialisable.TypeFractal.JULIA;
         color = Initialisable.ColorScheme.BLUE;
         isTimeDisplayed = true;
         widthPNG = 4000;
         heightPNG = 2000;
-        MAX_ITER = 1000;
+        maxIter = 1000;
         RADIUS = 2.0;
         complexRect = new Rectangle2D.Double(-2.0, -1.0, 4.0, 2.0);
         countThreads = Runtime.getRuntime().availableProcessors();
@@ -66,13 +64,11 @@ public class Controller implements Initialisable
         {
             Properties prop = new Properties();
             prop.setProperty("constant", constant.toString());
-
-            prop.setProperty("coefficient", Double.toString(coefficient));
             prop.setProperty("func", func.toString());
             prop.setProperty("fract", fract.toString());
             prop.setProperty("color", color.toString());
             prop.setProperty("countThreads", Integer.toString(countThreads));
-            prop.setProperty("MAX_ITER", Integer.toString(MAX_ITER));
+            prop.setProperty("maxIter", Integer.toString(maxIter));
             prop.setProperty("RADIUS", Double.toString(RADIUS));
             prop.setProperty("widthPNG", Integer.toString(widthPNG));
             prop.setProperty("heightPNG", Integer.toString(heightPNG));
@@ -100,12 +96,11 @@ public class Controller implements Initialisable
             prop.load(input);
 
             constant    = Complex.fromString(prop.getProperty("constant"));
-            coefficient = Double.valueOf(prop.getProperty("coefficient"));
             func        = Initialisable.TypeFunction.valueOf(prop.getProperty("func"));
             fract       = Initialisable.TypeFractal.valueOf(prop.getProperty("fract"));
             color       = Initialisable.ColorScheme.valueOf(prop.getProperty("color"));
             countThreads= Integer.valueOf(prop.getProperty("countThreads"));
-            MAX_ITER    = Integer.valueOf(prop.getProperty("MAX_ITER"));
+            maxIter     = Integer.valueOf(prop.getProperty("maxIter"));
             RADIUS      = Double.valueOf(prop.getProperty("RADIUS"));
             widthPNG    = Integer.valueOf(prop.getProperty("widthPNG"));
             heightPNG   = Integer.valueOf(prop.getProperty("heightPNG"));
@@ -173,8 +168,7 @@ public class Controller implements Initialisable
     public Complex                           getConstant()            { return constant; }
     public double                            getRe()                  { return constant.realPart(); }
     public double                            getIm()                  { return constant.imaginaryPart(); }
-    public int                               getMaxIter()             { return MAX_ITER; }
-    public double                            getCoeff()               { return coefficient; }
+    public int                               getMaxIter()             { return maxIter; }
     public int                               getCountThreads()        { return countThreads; }
     public boolean                           getIsDisplayTime()       { return isTimeDisplayed; }
     public String                            getPath()                { return pathFile; }
@@ -190,8 +184,7 @@ public class Controller implements Initialisable
     public void         setFractalType(Initialisable.TypeFractal f)   { isChanged = true; fract = f; }
     public void         setColorScheme(Initialisable.ColorScheme c)   { isChanged = true; color = c; }
     public void         setConstant(Complex c)                        { isChanged = true; constant = c; }
-    public void         setMaxIter(int maxIter)                       { isChanged = true; MAX_ITER = maxIter; }
-    public void         setCoeff(double c)                            { isChanged = true; coefficient = c; }
+    public void         setMaxIter(int maxIter)                       { isChanged = true; this.maxIter = maxIter; }
     public void         setCountThreads(int th)                       { isChanged = true; countThreads = th; }
     public void         setIsDisplayTime(boolean t)                   { isChanged = true; isTimeDisplayed = t;}
     public void         setPath(String p)                             { isChanged = true; pathFile = p; }

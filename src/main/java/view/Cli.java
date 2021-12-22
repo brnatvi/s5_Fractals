@@ -4,7 +4,7 @@ import controller.Controller;
 import interfaces.Initialisable;
 import model.Complex;
 import model.FractalFactory;
-import model.FractalTaskAgregator;
+import model.FractalTaskAggregator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -180,7 +180,7 @@ public class Cli
                         controller.setPath(v);
                         break;
 
-                    case "size":                                               // type of fractal
+                    case "size":                                               // size of image
                         String[] size = v.split("x");
                         if (size.length != 2)
                         {
@@ -293,16 +293,16 @@ public class Cli
 
         FractalFactory factory = new FractalFactory(controller);
 
-        FractalTaskAgregator TaskAgregator = new FractalTaskAgregator(factory, controller);
+        FractalTaskAggregator taskAgregator = new FractalTaskAggregator(factory, controller);
 
         ForkJoinPool forkJoinPool = new ForkJoinPool(controller.getCountThreads(),
                                                      ForkJoinPool.defaultForkJoinWorkerThreadFactory,
                                                      null,
                                                      true);
-        forkJoinPool.execute(TaskAgregator);
-        int[] points = TaskAgregator.join();
+        forkJoinPool.execute(taskAgregator);
+        int[] points = taskAgregator.join();
 
-        int width = TaskAgregator.getWidth();
+        int width = taskAgregator.getWidth();
         int height = points.length / width;
 
         long finish1 = System.currentTimeMillis();

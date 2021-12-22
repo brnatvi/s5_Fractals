@@ -19,7 +19,6 @@ public interface Initialisable
     public Initialisable.ColorScheme   getColorScheme();
     public Complex                     getConstant();
     public int                         getMaxIter();
-    public double                      getCoeff();
     public int                         getCountThreads();
     public boolean                     getIsDisplayTime();
     public String                      getPath();
@@ -29,11 +28,10 @@ public interface Initialisable
     public Rectangle2D.Double          getComplexRect();
 
     public void     setFunctionType(Initialisable.TypeFunction f);
-    public void setFractalType(Initialisable.TypeFractal f);
+    public void     setFractalType(Initialisable.TypeFractal f);
     public void     setColorScheme(Initialisable.ColorScheme c);
     public void     setConstant(Complex c);
     public void     setMaxIter(int maxIter);
-    public void     setCoeff(double c);
     public void     setCountThreads(int th);
     public void     setIsDisplayTime(boolean t);
     public void     setPath(String path);
