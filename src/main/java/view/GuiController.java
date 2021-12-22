@@ -32,11 +32,16 @@ import java.util.concurrent.ForkJoinPool;
 
 public class GuiController
 {
+    /**
+     * GUI's controller class. Runs by launch() in App class and launches all processes.
+     */
+
     @FXML private MenuItem menuExportConfig;
     @FXML private MenuItem menuImportConfig;
     @FXML private MenuItem menuSaveAsPNG;
     @FXML private RadioMenuItem menuQuadratic;
     @FXML private RadioMenuItem menuCubic;
+    @FXML private RadioMenuItem menuBiquadratic;
     @FXML private RadioMenuItem menuJulia;
     @FXML private RadioMenuItem menuMandelbrot;
     @FXML private RadioMenuItem menuColorBlue;
@@ -64,9 +69,11 @@ public class GuiController
     private double               startDragX = 0.0;
     private double               startDragY = 0.0;
     private long                 timeStart  = 0;
-    private int[] copy;
+    private int[]                copy;
 
+    /** Enum state of graphic thread (IDLE, RUNNING). **/
     private enum enumDrawingState {IDLE, RUNNING};
+    /** State of graphic thread. **/
     private enumDrawingState state = enumDrawingState.IDLE;
 
 
@@ -77,18 +84,25 @@ public class GuiController
         initEnvironment();
         display();
     }
-
+    /**
+     * {@summary Set controller of fractal.}
+     */
     public void setFractalController(Controller c)
     {
         controller = c;
         factory = new FractalFactory(controller);
     }
-
+    /**
+     * {@summary Set stage.}
+     */
     public void setStage(Stage primaryStage)
     {
         stage = primaryStage;
     }
 
+    /**
+     * {@summary Initialisation of menus, fields of UI, set zoom and movement of image.}
+     */
     private void initEnvironment()
     {
         menuExportConfig.setOnAction         (e -> exportConfig(e));
@@ -104,6 +118,7 @@ public class GuiController
         });
         menuQuadratic.setOnAction            (e -> controller.setFunctionType(Initialisable.TypeFunction.QUADRATIC));
         menuCubic.setOnAction                (e -> controller.setFunctionType(Initialisable.TypeFunction.CUBIC));
+        menuBiquadratic.setOnAction          (e -> controller.setFunctionType(Initialisable.TypeFunction.BIQUADRATIC));
         menuJulia.setOnAction                (e -> controller.setFractalType(Initialisable.TypeFractal.JULIA));
         menuMandelbrot.setOnAction           (e -> controller.setFractalType(Initialisable.TypeFractal.MANDELBROT));
         menuColorBlue.setOnAction            (e -> controller.setColorScheme(Initialisable.ColorScheme.BLUE));
@@ -206,15 +221,20 @@ public class GuiController
     //============================ Thread management ==============================
 
     /**
-     * {@summary Management of animation's thread.}
+     * {@summary Function to draw fractal in UI.}
+     * Creates Timeline.
+     *
+     * If thread is running:
      * <ul>
-     * <li> creation of Timeline
-     * <li> if this thread is running:
-     * <li> if this thread is idle:
-     * <li> defines optimal size of windows based on the screen size, min/max dimensions and resizability
-     * <li> sets onCloseRequest
-     * <li> shows
+     * <li> checks the size (and updates it if necessary)
+     * <li> if there was some changing - abort calculations, then rerun calculations
+     * <li> if nothing was changed - check if ForkJoinPool finished his work and draw image; if not - prints "." to log field to indicate processing
+     *
+     * If thread is idle:
+     * <li> checks the size (and updates it if necessary)
+     * <li> check if there was some changing - start calculations
      * </ul>
+     * Notifies user his actions.
      */
     private void display()
     {
@@ -295,6 +315,9 @@ public class GuiController
 
     //============================ Menu's functions ==============================
 
+    /**
+     * {@summary Save fractal to config file.}
+     */
     private void exportConfig(ActionEvent e)
     {
         FileChooser fileChooser = new FileChooser();
@@ -314,7 +337,9 @@ public class GuiController
             }
         }
     }
-
+    /**
+     * {@summary Load fractal from config file (.fct).}
+     */
     private void importConfig(ActionEvent e)
     {
         FileChooser fileChooser = new FileChooser();
@@ -335,7 +360,9 @@ public class GuiController
         }
         setMenusAndFields();
     }
-
+    /**
+     * {@summary Save image as .png.}
+     */
     private void saveAsPNG(ActionEvent e) throws IOException
     {
         if (state == enumDrawingState.RUNNING)
@@ -374,6 +401,11 @@ public class GuiController
             case CUBIC:
             {
                 menuCubic.setSelected(true);
+                break;
+            }
+            case BIQUADRATIC:
+            {
+                menuBiquadratic.setSelected(true);
                 break;
             }
         }

@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 
 public interface Initialisable
 {
-    enum TypeFunction {QUADRATIC, CUBIC};
+    enum TypeFunction {QUADRATIC, CUBIC, BIQUADRATIC};
     enum TypeFractal {JULIA, MANDELBROT};
     enum ColorScheme {RED, GREEN, BLUE};
 

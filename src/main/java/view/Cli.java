@@ -113,6 +113,9 @@ public class Cli
                         if (v.toLowerCase().equals("q"))
                         {
                             controller.setFunctionType(Initialisable.TypeFunction.QUADRATIC);
+                        } else if (v.toLowerCase().equals("bq"))
+                        {
+                            controller.setFunctionType(Initialisable.TypeFunction.BIQUADRATIC);
                         } else if (v.toLowerCase().equals("c"))
                         {
                             controller.setFunctionType(Initialisable.TypeFunction.CUBIC);
@@ -258,7 +261,7 @@ public class Cli
                 "Available program options :\n" +
                 " --type  - type of fractal (Julia (J) or Mandelbrot (M))\n" +
                 " --color - choose color scheme to draw fractal (blue(B), green (G) or red (R))\n" +
-                " --f     - type of function to calculate fractal (quadratic (Q), cubic (C))\n" +
+                " --f     - type of function to calculate fractal (quadratic (Q), cubic (C), biquadratic (BQ))\n" +
                 " --c     - set the constant: two floating point numbers <re;im>\n" +
                 "           Example: -0.257;0.685 \n" +
                 "           (for Julia's fractal they have to be in range [-1.0, 1.0] to obtain a beautiful result)\n" +

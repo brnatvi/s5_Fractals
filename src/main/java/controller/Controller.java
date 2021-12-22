@@ -130,7 +130,10 @@ public class Controller implements Initialisable
                 ret = (x, y) -> x.times(x).plus(y);
                 break;
             case CUBIC:
-                ret = (x, y) -> x.times(x).times(x).plus(x.times(x)).plus(y);
+                ret = (x, y) -> x.times(x).times(x).plus(y);
+                break;
+            case BIQUADRATIC:
+                ret = (x, y) -> x.times(x).times(x).times(x).plus(y);
                 break;
         }
         return ret;
