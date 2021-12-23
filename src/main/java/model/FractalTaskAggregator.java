@@ -3,6 +3,7 @@ package model;
 import controller.Controller;
 import interfaces.Calculable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.RecursiveTask;
 
@@ -45,7 +46,12 @@ public class FractalTaskAggregator extends RecursiveTask<int[]>
     protected int[] compute()
     {
         //create list of sliced fractals objects
-        ArrayList<Calculable> fractals = factory.createSliced();
+        ArrayList<Calculable> fractals = null;
+        try {
+            fractals = factory.createSliced();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ArrayList<FractalTask> tasks = new ArrayList<>();
 
         //for each fractal - create list of tasks and start them

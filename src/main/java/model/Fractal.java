@@ -3,7 +3,9 @@ package model;
 import controller.Controller;
 
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public abstract class Fractal implements interfaces.Calculable
 {
@@ -19,11 +21,10 @@ public abstract class Fractal implements interfaces.Calculable
     protected double     up;
     protected double     down;
     protected BiFunction calc;
-    protected BiFunction paint;
+    protected Function<Integer, Integer> paint;
     protected int        countThreads;
 
-    public Fractal(Controller c, int nbThread)
-    {
+    public Fractal(Controller c, int nbThread) throws IOException {
         controller = c;
         Rectangle2D.Double r = controller.getComplexRect();
         calc = controller.getFractalFunction();

@@ -2,10 +2,12 @@ package model;
 
 import controller.Controller;
 
+import java.io.IOException;
+
 public class FractalMandelbrot extends Fractal
 {
 
-    public FractalMandelbrot(Controller c, int nbThread) { super(c, nbThread); }
+    public FractalMandelbrot(Controller c, int nbThread) throws IOException { super(c, nbThread); }
 
     public int[] calculate()
     {
@@ -30,8 +32,8 @@ public class FractalMandelbrot extends Fractal
                     z = (Complex) calc.apply(z, c);
                     iter++;
                 }
-                double val = (double)iter/(double)maxIt;
-                points[IdxW + IdxH * widthPNG] = (int) paint.apply(val, z.mod()) | 0xFF000000;
+//                double val = (double)iter/(double)maxIt;
+                points[IdxW + IdxH * widthPNG] = (int) paint.apply(iter) | 0xFF000000;
 
                 if ((0 == (IdxH % 100)) && (controller.getAbort()))
                 {
