@@ -3,7 +3,9 @@ package interfaces;
 import model.Complex;
 
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface Initialisable
 {
@@ -12,7 +14,7 @@ public interface Initialisable
     enum ColorScheme {RED, GREEN, BLUE};
 
     public BiFunction                  getFractalFunction();
-    public BiFunction                  getColorFunction();
+    public Function getColorFunction() throws IOException;
 
     public Initialisable.TypeFunction  getFunctionType();
     public Initialisable.TypeFractal   getTypeFractal();

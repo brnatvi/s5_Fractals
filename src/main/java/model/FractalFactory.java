@@ -4,6 +4,7 @@ import controller.Controller;
 import interfaces.Calculable;
 import interfaces.Initialisable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FractalFactory
@@ -12,8 +13,7 @@ public class FractalFactory
 
     public FractalFactory(Controller c) { controller = c; }
 
-    public ArrayList<Calculable> createSliced()
-    {
+    public ArrayList<Calculable> createSliced() throws IOException {
         ArrayList<Calculable> ret = new ArrayList<>();
 
         for (int i = 0; i < controller.getCountThreads(); i++)

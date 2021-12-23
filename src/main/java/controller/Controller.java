@@ -3,11 +3,14 @@ package controller;
 import interfaces.Initialisable;
 import model.Complex;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Controller implements Initialisable
 {
@@ -37,7 +40,7 @@ public class Controller implements Initialisable
         constant = Complex.createComplex(re, im);
         func  = Initialisable.TypeFunction.QUADRATIC;
         fract = Initialisable.TypeFractal.JULIA;
-        color = Initialisable.ColorScheme.BLUE;
+        color = Initialisable.ColorScheme.RED;
         isTimeDisplayed = true;
         widthPNG = 4000;
         heightPNG = 2000;
@@ -139,25 +142,46 @@ public class Controller implements Initialisable
         return ret;
     }
 
-    public BiFunction getColorFunction()
-    {
-        BiFunction<Double, Double, Integer> ret = null;
+//    public BiFunction getColorFunction()
+//    {
+//        BiFunction<Double, Double, Integer> ret = null;
+//        switch (color)
+//        {
+//            case RED:
+//                ret = (val, zMod) -> (int)(4280*(Math.sin(val+600))+700) << 16 |
+//                                     (int) (2056*((Math.sin(val+600))+700)) << 8 |
+//                                     (int) (1800 *(Math.sin(val+600))+700);
+//                break;
+//            case GREEN:
+//                ret = (val, zMod) -> (int)(5208 * (zMod > RADIUS ? 1.0 : zMod / RADIUS)) << 16 |
+//                                     (int)(4280*(Math.sin(val+600))+8508) << 8 |
+//                                     (int) (1697 *(Math.sin(val+160))+333);
+//                break;
+//            case BLUE:
+//                ret = (val, zMod) -> ((int)(5855.0 * (val)) << 16) |
+//                                       ((int)(3658.0 * (1-val)) << 8) |
+//                                       (int)(1255.0 * (zMod > RADIUS ? 1.0 : zMod / RADIUS));
+//                break;
+//        }
+//        return ret;
+//    }
+
+    public Function getColorFunction () throws IOException {
+        Function <Integer, Integer> ret = null;
+
+
+
         switch (color)
         {
             case RED:
-                ret = (val, zMod) -> (int)(4280*(Math.sin(val+600))+700) << 16 |
-                                     (int) (2056*((Math.sin(val+600))+700)) << 8 |
-                                     (int) (1800 *(Math.sin(val+600))+700);
+                BufferedImage img = null;
+                img = ImageIO.read(new File("/main/resources/grad6.jpg"));
+                BufferedImage finalImg = img;
+                ret = (iter2) -> finalImg.getRGB(iter2, 400);
                 break;
             case GREEN:
-                ret = (val, zMod) -> (int)(5208 * (zMod > RADIUS ? 1.0 : zMod / RADIUS)) << 16 |
-                                     (int)(4280*(Math.sin(val+600))+8508) << 8 |
-                                     (int) (1697 *(Math.sin(val+160))+333);
                 break;
             case BLUE:
-                ret = (val, zMod) -> ((int)(5855.0 * (val)) << 16) |
-                                       ((int)(3658.0 * (1-val)) << 8) |
-                                       (int)(1255.0 * (zMod > RADIUS ? 1.0 : zMod / RADIUS));
                 break;
         }
         return ret;
