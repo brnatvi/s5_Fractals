@@ -40,7 +40,7 @@ public class Controller implements Initialisable
         constant = Complex.createComplex(re, im);
         func  = Initialisable.TypeFunction.QUADRATIC;
         fract = Initialisable.TypeFractal.JULIA;
-        color = Initialisable.ColorScheme.RED;
+        color = Initialisable.ColorScheme.BLUE;
         isTimeDisplayed = true;
         widthPNG = 4000;
         heightPNG = 2000;
@@ -169,19 +169,25 @@ public class Controller implements Initialisable
     public Function getColorFunction () throws IOException {
         Function <Integer, Integer> ret = null;
 
-
-
         switch (color)
         {
             case RED:
-                BufferedImage img = null;
-                img = ImageIO.read(new File("/main/resources/grad6.jpg"));
-                BufferedImage finalImg = img;
-                ret = (iter2) -> finalImg.getRGB(iter2, 400);
+                BufferedImage imgR = null;
+                imgR = ImageIO.read(new File("/Users/sihno/Desktop/img/gradR.jpg"));
+                int widthImgR = imgR.getWidth();
+                BufferedImage finalImgR = imgR;
+                ret = (iter) -> finalImgR.getRGB(iter%widthImgR, 29);
+//                ret = (iter) -> finalImgR.getRGB(iter, 29);
+
                 break;
             case GREEN:
                 break;
             case BLUE:
+                BufferedImage imgB = null;
+                imgB = ImageIO.read(new File("/Users/sihno/Desktop/img/gradB.jpg"));
+                int widthImgB = imgB.getWidth();
+                BufferedImage finalImgB = imgB;
+                ret = (iter) -> finalImgB.getRGB(iter%widthImgB, 10);
                 break;
         }
         return ret;
