@@ -131,7 +131,7 @@ public class GuiController
         menu16Th.setOnAction                 (e -> controller.setCountThreads(16));
         menuOptimumTh.setOnAction            (e -> controller.setCountThreads(Runtime.getRuntime().availableProcessors()));
         taConsole.textProperty().addListener (e -> taConsole.setScrollTop(0));
-
+        
         ivFractal.setOnScroll(e -> {
             double zoomFactor = 0;
             double deltaY = e.getDeltaY();

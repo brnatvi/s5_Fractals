@@ -327,6 +327,7 @@ public class Cli
     public static void main(String[] args)
     {
         Cli cli = new Cli(args);
+        System.exit(0);
     }
 }
 

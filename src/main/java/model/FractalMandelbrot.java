@@ -32,8 +32,9 @@ public class FractalMandelbrot extends Fractal
                     z = (Complex) calc.apply(z, c);
                     iter++;
                 }
-//                double val = (double)iter/(double)maxIt;
-                points[IdxW + IdxH * widthPNG] = (int) paint.apply(iter) | 0xFF000000;
+//                double val = (double)iter/(double) maxIt;                                           // if use another bifunction
+//                points[IdxW + IdxH * widthPNG] = (int) paint.apply(val, z.mod()) | 0xFF000000;      // if use another bifunction
+                points[IdxW + IdxH * widthPNG] = (int) paint.apply(iter, maxIt) | 0xFF000000;
 
                 if ((0 == (IdxH % 100)) && (controller.getAbort()))
                 {

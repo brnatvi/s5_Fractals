@@ -10,7 +10,6 @@ import java.io.*;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Controller implements Initialisable
 {
@@ -115,6 +114,8 @@ public class Controller implements Initialisable
             complexRect.width  = Double.valueOf(complexVals[2]);
             complexRect.height = Double.valueOf(complexVals[3]);
 
+            isChanged = true;
+
             return true;
         } catch (IOException ex)
         {
@@ -142,52 +143,28 @@ public class Controller implements Initialisable
         return ret;
     }
 
-//    public BiFunction getColorFunction()
-//    {
-//        BiFunction<Double, Double, Integer> ret = null;
-//        switch (color)
-//        {
-//            case RED:
-//                ret = (val, zMod) -> (int)(4280*(Math.sin(val+600))+700) << 16 |
-//                                     (int) (2056*((Math.sin(val+600))+700)) << 8 |
-//                                     (int) (1800 *(Math.sin(val+600))+700);
-//                break;
-//            case GREEN:
-//                ret = (val, zMod) -> (int)(5208 * (zMod > RADIUS ? 1.0 : zMod / RADIUS)) << 16 |
-//                                     (int)(4280*(Math.sin(val+600))+8508) << 8 |
-//                                     (int) (1697 *(Math.sin(val+160))+333);
-//                break;
-//            case BLUE:
-//                ret = (val, zMod) -> ((int)(5855.0 * (val)) << 16) |
-//                                       ((int)(3658.0 * (1-val)) << 8) |
-//                                       (int)(1255.0 * (zMod > RADIUS ? 1.0 : zMod / RADIUS));
-//                break;
-//        }
-//        return ret;
-//    }
-
-    public Function getColorFunction () throws IOException {
-        Function <Integer, Integer> ret = null;
+    public BiFunction getColorFunction () throws IOException {
+        BiFunction <Integer, Integer, Integer> ret = null;
 
         switch (color)
         {
             case RED:
-                BufferedImage imgR = null;
-                imgR = ImageIO.read(new File("/Users/sihno/Desktop/img/gradR.jpg"));
-                int widthImgR = imgR.getWidth();
-                BufferedImage finalImgR = imgR;
-                ret = (iter) -> finalImgR.getRGB(iter%widthImgR, 29);
-//                ret = (iter) -> finalImgR.getRGB(iter, 29);
+                BufferedImage finalImgR = ImageIO.read(getClass().getResourceAsStream("/gradient_R.jpg"));
+                ret = (iter, maxIter) -> finalImgR.getRGB(iter * (finalImgR.getWidth() - 1) / maxIter, 0);
+                //BufferedImage finalImgR = ImageIO.read(getClass().getResourceAsStream("/grad_R.jpg"));
+                //ret = (iter) -> finalImgR.getRGB(iter%finalImgR.getWidth(), 29);
+                break;
 
-                break;
             case GREEN:
+                BufferedImage finalImgG = ImageIO.read(getClass().getResourceAsStream("/gradient_G.jpg"));
+                ret = (iter, maxIter) -> finalImgG.getRGB(iter*(finalImgG.getWidth() - 1)/maxIter, 0);
                 break;
+
             case BLUE:
-                BufferedImage imgB = null;
-                imgB = ImageIO.read(new File("/Users/sihno/Desktop/img/gradB.jpg"));
-                int widthImgB = imgB.getWidth();
-                BufferedImage finalImgB = imgB;
-                ret = (iter) -> finalImgB.getRGB(iter%widthImgB, 10);
+                BufferedImage finalImgB = ImageIO.read(getClass().getResourceAsStream("/gradient_B.jpg"));
+                ret = (iter, maxIter) -> finalImgB.getRGB(iter*(finalImgB.getWidth() - 1)/maxIter, 0);
+                //BufferedImage finalImgB = ImageIO.read(getClass().getResourceAsStream("/grad_B.jpg"));
+                //ret = (iter) -> finalImgB.getRGB(iter%finalImgB.getWidth(), 10);
                 break;
         }
         return ret;
