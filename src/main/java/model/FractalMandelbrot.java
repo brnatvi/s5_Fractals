@@ -4,11 +4,24 @@ import controller.Controller;
 
 import java.io.IOException;
 
+/**
+ * The class FractalMandelbrot contains basic parameters necessary for building a fractal of type Mandelbrot.
+ * It extends the class Fractal.
+ */
+
 public class FractalMandelbrot extends Fractal
 {
 
+    /**
+     * {@summary External use constructor. Instantiates FracctalMandelbrot. }
+     * @param c the Controller
+     * @param nbThread the number of threads
+     */
     public FractalMandelbrot(Controller c, int nbThread) throws IOException { super(c, nbThread); }
 
+    /**
+     * {@summary The principal method of FractalMandelbrot calculation.}
+     */
     public int[] calculate()
     {
         double len = Math.abs(right - left);

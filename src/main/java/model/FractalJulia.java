@@ -4,11 +4,24 @@ import controller.Controller;
 
 import java.io.IOException;
 
+/**
+ * The class FractalJulia contains basic parameters necessary for building a fractal of type Julia.
+ * It extends the class Fractal.
+ */
+
 public class FractalJulia extends Fractal
 {
 
+    /**
+     * {@summary External use constructor. Instantiates FracctalJulia. }
+     * @param c the Controller
+     * @param nbThread the number of threads
+     */
     public FractalJulia(Controller c, int nbThread) throws IOException { super(c, nbThread); }
 
+    /**
+     * {@summary The principal method of FractalJulia calculation.}
+     */
     public int[] calculate()
     {
         double len = Math.abs(right - left);
