@@ -1,5 +1,5 @@
 [main]: https://gaufre.informatique.univ-paris-diderot.fr/raveneau/corona-bounce
-[comment-shield]: https://img.shields.io/badge/Javadoc-0%25-brightgreen
+[comment-shield]: https://img.shields.io/badge/Javadoc-100%25-brightgreen
 [ ![comment-shield][] ][main]
 
 
