@@ -13,22 +13,22 @@ import java.util.function.BiFunction;
 
 /**
  * The class Controller contains the parameters necessary for building a fractal.
- * It provide initial values of parameters and methods to change them while the program runs.
+ * It is in charge of storing and providing fractal parameters.
  */
 
 public class Controller implements Initialisable
 {
     /**
-     * Constants are initials and will be changed during the changing the settings of program in GUI or in CLI
+     * Private parameters 
      */
 
-    /** Boolean which shows whether the Controller has been changed **/
+    /** boolean flag, indicates when any parameter(s) was changes, used by model to detect a moment when fractal should be recalculated  **/
     private boolean isChanged;
-    /** Constant from class of Complex numbers **/
+    /** Complex fractal's constant for calculations **/
     private Complex constant;
-    /** Real part of the constant **/
+    /** Real part of the complex constant **/
     private double re;
-    /** Imaginary part of the constant **/
+    /** Imaginary part of the complex constant **/
     private double im;
     /** Function type **/
     private Initialisable.TypeFunction func;
@@ -36,29 +36,29 @@ public class Controller implements Initialisable
     private Initialisable.TypeFractal fract;
     /** Color scheme **/
     private Initialisable.ColorScheme color;
-    /** Boolean which shows whether the time of fractal building is displayed **/
+    /** Boolean which shows whether the time of fractal building is displayed (used in CLI) **/
     private boolean isTimeDisplayed;
-    /** Path to a file **/
+    /** Path for configuration file **/
     private String pathFile;
-    /** Number of threads used **/
+    /** Number of threads to be used used **/
     private int countThreads;
     /** Maximal number of iteration **/
     private int maxIter;
-    /** Radius size **/
+    /** Radius of convergence **/
     private double RADIUS;
     /** Width of the generated image **/
     private int widthPNG;
     /** Height of the generated image **/
     private int heightPNG;
-    /** Size of the generated rectangle **/
+    /** Size of the complex rectangle **/
     private Rectangle2D.Double complexRect;
-    /** Variable to abort calculation **/
+    /** Variable to abort calculation (used in GUI) **/
     private AtomicBoolean abortCalculation;
 
     //============================== Constructor ================================
 
     /**
-     * {@summary Constructor which instantiates a new Controller.}
+     * {@summary Constructor which instantiates a Controller and its parameters}
      */
 
     public Controller()
@@ -85,8 +85,8 @@ public class Controller implements Initialisable
     //============================ Others ==================================
 
     /**
-     * {@summary Shows whether the Controller has been changed.}
-     * @return the boolean tmp
+     * {@summary Shows whether any parameter of the Controller has been changed.}
+     * @return the boolean isChanged
      */
 
     public boolean isControllerChanged()
@@ -97,7 +97,8 @@ public class Controller implements Initialisable
     }
 
     /**
-     * {@summary Loads parameters from a config file.}
+     * {@summary Loads parameters from a configuration file.}
+	 * @param fileName path to configuration file
      * @return true ( or false in case of error)
      */
 
@@ -132,7 +133,8 @@ public class Controller implements Initialisable
     }
 
     /**
-     * {@summary Saves parameters to a config file.}
+     * {@summary Saves parameters to a configuration file.}
+	 * @param fileName path to configuration file
      * @return true ( or false in case of error)
      */
 
@@ -170,12 +172,6 @@ public class Controller implements Initialisable
     }
 
     //======================== Lambda's getters ============================
-
-    /**
-     * {@summary Provides parameters for the function type.}
-     * @return a complex number
-     */
-
     public BiFunction getFractalFunction()
     {
         BiFunction<Complex, Complex, Complex> ret = null;
@@ -194,11 +190,6 @@ public class Controller implements Initialisable
         return ret;
     }
 
-    /**
-     * {@summary Provides parameters for the color scheme.}
-     * @return an Integer
-     */
-
     public BiFunction getColorFunction () throws IOException {
         BiFunction <Integer, Integer, Integer> ret = null;
 
@@ -208,7 +199,7 @@ public class Controller implements Initialisable
                 BufferedImage finalImgR = ImageIO.read(getClass().getResourceAsStream("/gradient_R.jpg"));
                 ret = (iter, maxIter) -> finalImgR.getRGB(iter * (finalImgR.getWidth() - 1) / maxIter, 0);
                 //BufferedImage finalImgR = ImageIO.read(getClass().getResourceAsStream("/grad_R.jpg"));
-                //ret = (iter) -> finalImgR.getRGB(iter%finalImgR.getWidth(), 29);
+                //ret = (iter, z.mod()) -> finalImgR.getRGB(iter%finalImgR.getWidth(), 29);
                 break;
 
             case GREEN:
@@ -220,96 +211,36 @@ public class Controller implements Initialisable
                 BufferedImage finalImgB = ImageIO.read(getClass().getResourceAsStream("/gradient_B.jpg"));
                 ret = (iter, maxIter) -> finalImgB.getRGB(iter*(finalImgB.getWidth() - 1)/maxIter, 0);
                 //BufferedImage finalImgB = ImageIO.read(getClass().getResourceAsStream("/grad_B.jpg"));
-                //ret = (iter) -> finalImgB.getRGB(iter%finalImgB.getWidth(), 10);
+                //ret = (iter, z.mod()) -> finalImgB.getRGB(iter%finalImgB.getWidth(), 10);
                 break;
         }
         return ret;
     }
 
     //============================ Getters ================================
-
-    /**
-     * {@summary Gets the function type.}
-     * @return the function
-     */
     public Initialisable.TypeFunction        getFunctionType()        { return func; }
-
-    /**
-     * {@summary Gets the fractal type.}
-     * @return the fractal
-     */
     public Initialisable.TypeFractal         getTypeFractal()         { return fract; }
-
-    /**
-     * {@summary Gets the color scheme.}
-     * @return the color
-     */
     public Initialisable.ColorScheme         getColorScheme()         { return color; }
-
-    /**
-     * {@summary Gets the constant.}
-     * @return the constant
-     */
     public Complex                           getConstant()            { return constant; }
 
     /**
      * {@summary Gets the real part of the constant.}
-     * @return the real part of the constant
+     * @return the real part of the complex constant
      */
     public double                            getRe()                  { return constant.realPart(); }
 
     /**
      * {@summary Gets the imaginary part of the constant.}
-     * @return the imaginary part of the constant
+     * @return the imaginary part of the complex constant
      */
     public double                            getIm()                  { return constant.imaginaryPart(); }
-
-    /**
-     * {@summary Gets the number of iterations.}
-     * @return the number of iterations
-     */
     public int                               getMaxIter()             { return maxIter; }
-
-    /**
-     * {@summary Gets the number of threads.}
-     * @return the number of threads
-     */
     public int                               getCountThreads()        { return countThreads; }
-
-    /**
-     * {@summary Gets the boolean showing whether the time is displayed.}
-     * @return boolean
-     */
     public boolean                           getIsDisplayTime()       { return isTimeDisplayed; }
-
-    /**
-     * {@summary Gets the path to a file.}
-     * @return the path to a file
-     */
     public String                            getPath()                { return pathFile; }
-
-    /**
-     * {@summary Gets the width of the generated image.}
-     * @return the width of the generated image
-     */
     public int                               getWidthPNG()            { return widthPNG; }
-
-    /**
-     * {@summary Gets the height of the generated image.}
-     * @return the height of the generated image
-     */
     public int                               getHeightPNG()           { return heightPNG; }
-
-    /**
-     * {@summary Gets the radius.}
-     * @return the radius
-     */
     public double                            getRadius()              { return RADIUS; }
-
-    /**
-     * {@summary Gets the dimensions of the generated rectangle.}
-     * @return the dimensions of the generated rectangle
-     */
     public Rectangle2D.Double                getComplexRect()         { return complexRect; }
 
     /**
@@ -319,74 +250,39 @@ public class Controller implements Initialisable
     public boolean                           getAbort()               { return abortCalculation.get();}
 
     //============================ Setters ==============================
-
-    /**
-     * {@summary Setter of the function type. }
-     */
     public void         setFunctionType(Initialisable.TypeFunction f) { isChanged = true; func = f; }
-
-    /**
-     * {@summary Setter of the fractal type. }
-     */
     public void         setFractalType(Initialisable.TypeFractal f)   { isChanged = true; fract = f; }
-
-    /**
-     * {@summary Setter of the color scheme. }
-     */
     public void         setColorScheme(Initialisable.ColorScheme c)   { isChanged = true; color = c; }
-
-    /**
-     * {@summary Setter of the constant. }
-     */
     public void         setConstant(Complex c)                        { isChanged = true; constant = c; }
-
-    /**
-     * {@summary Setter of the maximum number of iterations. }
-     */
     public void         setMaxIter(int maxIter)                       { isChanged = true; this.maxIter = maxIter; }
-
-    /**
-     * {@summary Setter of the number of threads. }
-     */
     public void         setCountThreads(int th)                       { isChanged = true; countThreads = th; }
-
-    /**
-     * {@summary Setter of the boolean showing whether the time is displayed. }
-     */
     public void         setIsDisplayTime(boolean t)                   { isChanged = true; isTimeDisplayed = t;}
-
-    /**
-     * {@summary Setter of the path to a file. }
-     */
     public void         setPath(String p)                             { isChanged = true; pathFile = p; }
-
-    /**
-     * {@summary Setter of the radius. }
-     */
     public void         setRadius(double r)                           { isChanged = true; RADIUS = r; }
-
-    /**
-     * {@summary Setter of the complex rectangle. }
-     */
     public void         setComplexRect(Rectangle2D.Double r)          { isChanged = true; complexRect = r;}
 
     /**
-     * {@summary Setter of the boolean to abort calculation. }
+     * {@summary Setter of the boolean to abort calculation. Multithread access protected!}
+	 * @param  a abort flag
      */
     public void         setAbort(boolean a)                           { abortCalculation.set(a);}
 
     /**
-     * {@summary Setter of the constant real part. }
+     * {@summary Setter of the complex constant real part. }
+	 * @param  r real part
      */
     public void         setNewRealPart(double r)                      { isChanged = true; constant = Complex.createComplex(r, im);}
 
     /**
-     * {@summary Setter of the constant imaginary part. }
+     * {@summary Setter of the complex constant imaginary part. }
+	 * @param  i imaginary part
      */
     public void         setNewImagPart(double i)                      { isChanged = true; constant = Complex.createComplex(re, i);}
 
     /**
      * {@summary Setter of the complex rectangle dimensions. }
+	 * @param  w view width
+	 * @param  h view height
      */
     public void setSize(int w, int h)
     {

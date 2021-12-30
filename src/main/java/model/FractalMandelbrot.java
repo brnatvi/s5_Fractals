@@ -5,15 +5,15 @@ import controller.Controller;
 import java.io.IOException;
 
 /**
- * The class FractalMandelbrot contains basic parameters necessary for building a fractal of type Mandelbrot.
- * It extends the class Fractal.
+ * The class FractalMandelbrot implements method to building a fractal of type Mandelbrot.
+ * It extends the abstract class Fractal.
  */
 
 public class FractalMandelbrot extends Fractal
 {
 
     /**
-     * {@summary External use constructor. Instantiates FracctalMandelbrot. }
+     * {@summary External use constructor. Instantiates FractalMandelbrot. }
      * @param c the Controller
      * @param nbThread the number of threads
      */
@@ -21,7 +21,8 @@ public class FractalMandelbrot extends Fractal
 
     /**
      * {@summary The principal method of FractalMandelbrot calculation.}
-     */
+     * @return RGB pixels array
+    */
     public int[] calculate()
     {
         double len = Math.abs(right - left);
@@ -45,8 +46,16 @@ public class FractalMandelbrot extends Fractal
                     z = (Complex) calc.apply(z, c);
                     iter++;
                 }
-//                double val = (double)iter/(double) maxIt;                                           // if use another bifunction
-//                points[IdxW + IdxH * widthPNG] = (int) paint.apply(val, z.mod()) | 0xFF000000;      // if use another bifunction
+
+                //0xFF000000 - set Alpha channel max value 0xFF/255.
+				//Each pixel consist of 4 channels:
+				//R - reg (8 bits, 1 byte)
+				//G - green (8 bits, 1 byte)
+				//B - blue (8 bits, 1 byte)
+				//A - transparency/alpha (8 bits, 1 byte), 0 - fully transparent, 255 - fully visible
+				//Each pixel has size of 32 bits, channels are located in next order and positions:
+				// bits 31 .. 24 .. 16 .. 08 .. 00
+				//      [  A  ][  B ][  G ][  R ]
                 points[IdxW + IdxH * widthPNG] = (int) paint.apply(iter, maxIt) | 0xFF000000;
 
                 if ((0 == (IdxH % 100)) && (controller.getAbort()))

@@ -39,7 +39,7 @@ mvn exec:java@exCli -Dexec.args="<Your options, see help>"
 ```                
 
 ## Open JavaDoc
-Launch code/docs/javadoc/apidocs/index.html on the web browser.
+Launch /docs/javadoc/apidocs/index.html on the web browser.
 
 # **Maintainers:**
 

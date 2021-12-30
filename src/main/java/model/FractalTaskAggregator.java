@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.concurrent.RecursiveTask;
 
 /**
- * The class FractalTaskAgregator proceeds in calculating the received parts of the fractal.
+ * The class FractalTaskAgregator is in charge or slicing and redistributing fractals calculation across different threads.
  * It extends RecursiveTask.
  */
 public class FractalTaskAggregator extends RecursiveTask<int[]>
 {
     /** FractalFactory as parameter of FractalTaskAgregator**/
     private FractalFactory factory;
-    /** Width and height which will be used in image creation**/
+    /** Width op resulting image. Need to be stored here because Controller value may be changed from another thread**/
     private int width  = 0;
+    /** Height op resulting image. Need to be stored here because Controller value may be changed from another thread**/
     private int height = 0;
 
     /**
@@ -44,7 +45,8 @@ public class FractalTaskAggregator extends RecursiveTask<int[]>
     public int getHeight() { return height; }
 
     /**
-     * {@summary The method of concatenation of the received parts of the fractal.}
+     * {@summary method concatenates RGB pixel arrays (produced by different thread) into single resulting image}
+     * @return RGB pixel array of resulting image
      */
     private int[] concatArrays(ArrayList<int[]> arrays)
     {
@@ -66,7 +68,8 @@ public class FractalTaskAggregator extends RecursiveTask<int[]>
     }
 
     /**
-     * {@summary The method of calculation, override from RecursiveTask.}
+     * {@summary Fractal calculation method. Redistributing fractals calculation across different threads, overrides from RecursiveTask.}
+     * @return RGB pixel array of resulting image
      */
     @Override
     protected int[] compute()

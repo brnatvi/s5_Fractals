@@ -19,6 +19,7 @@ public class Gui extends Application
 {
     /**
      * override of start() method of Application.
+     * @param primaryStage Stage application stage
      */
     @Override
     public void start(Stage primaryStage) throws Exception
@@ -62,6 +63,7 @@ public class Gui extends Application
 
     /**
      * main method
+     * @param args console arguments
      */
     public static void main(String[] args) { launch(args); }
 }

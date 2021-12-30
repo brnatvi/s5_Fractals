@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 /**
  * The abstract class Fractal contains basic parameters necessary for building a fractal.
- * It implements the Calculable interface which lets building fractals.
+ * It implements the Calculable interface which allows to draw fractals and returns pixels RGB array
  */
 
 public abstract class Fractal implements interfaces.Calculable
@@ -19,11 +19,11 @@ public abstract class Fractal implements interfaces.Calculable
 
     /** Constant from class of Complex numbers **/
     protected Complex    constant;
-    /** Controller provided **/
+    /** Fractal's controller **/
     protected Controller controller;
-    /** Array of fractal points **/
+    /** Array of fractal points, RGB format **/
     protected int[]      points;
-    /** Radius which limites convergence **/
+    /** Radius which limits convergence **/
     protected double     radius;
     /** Maximum number of iterations **/
     protected int        maxIt;
@@ -31,10 +31,13 @@ public abstract class Fractal implements interfaces.Calculable
     protected int        widthPNG;
     /** Height of the generated image **/
     protected int        heightPNG;
-    /** Positions on left, right, up and down for calculations **/
+    /** fractal's coordinates: left position**/
     protected double     left;
+    /** fractal's coordinates: right position**/
     protected double     right;
+    /** fractal's coordinates: up position**/
     protected double     up;
+    /** fractal's coordinates: down position**/
     protected double     down;
     /** BiFunction which calculates the fractal **/
     protected BiFunction calc;

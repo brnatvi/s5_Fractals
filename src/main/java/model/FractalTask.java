@@ -23,6 +23,7 @@ public class FractalTask extends RecursiveTask<int[]>
 
     /**
      * {@summary The method of calculation, override from RecursiveTask.}
+     * @return RGB pixels array
      */
     @Override
     protected int[] compute()

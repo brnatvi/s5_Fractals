@@ -16,7 +16,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
 /**
- * The class Cli provides a command line interface to interact with the program.
+ * The class Cli provides a command line interface to interact with the engine.
  */
 public class Cli
 {
@@ -82,6 +82,7 @@ public class Cli
 
         /**
          * {@summary The method for parsing command line arguments.}
+		 * @return map of command line arguments in key:value pairs shape
          */
         private Map<String, String> parse(String[] args)
         {
@@ -249,9 +250,9 @@ public class Cli
     {
         /** Controller as parameter of Report**/
         private Controller controller  = null;
-        /** Stores the time necessary to calculate**/
+        /** Stores the time consumed by fractal calculation**/
         private double     timeOfCalc  = 0;
-        /** Stores the time necessary to paint**/
+        /** Stores the time consumed by fractal drawing**/
         private long       timeOfPaint = 0;
 
         /**
@@ -295,7 +296,7 @@ public class Cli
     //============================ Lambda's getters ==============================
 
     /**
-     * {@summary Help with options available. }
+     * {@summary print to screen help with available options. }
      */
     private void showHelp()
     {
@@ -371,7 +372,7 @@ public class Cli
 
     //============================ Main function ==============================
     /**
-     * main method
+     * program main method
      */
     public static void main(String[] args)
     {
@@ -379,5 +380,3 @@ public class Cli
         System.exit(0);
     }
 }
-
-//--type J --color B --f Q --c -0.74543;0.11301 --t Y --n Opt --size 1000x400

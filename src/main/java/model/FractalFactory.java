@@ -18,13 +18,14 @@ public class FractalFactory
     private Controller controller;
 
     /**
-     * {@summary External use constructor. Instantiates FractalFactory. }
+     * {@summary FractalFactory constructor, instantiates the object with external controller }
      * @param c the Controller
      */
     public FractalFactory(Controller c) { controller = c; }
 
     /**
-     * {@summary Creates a sliced fractal as an array of Calculable.}
+     * {@summary Creates a sliced fractal as an array of Calculable objects}
+     * @return array of Calculable objects
      */
     public ArrayList<Calculable> createSliced() throws IOException {
         ArrayList<Calculable> ret = new ArrayList<>();

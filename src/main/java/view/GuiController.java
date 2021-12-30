@@ -60,15 +60,25 @@ public class GuiController
     @FXML private TextField tfIm;
     @FXML private Pane pnFractalView;
 
+    /** JavaFx UI stage**/
     private Stage                stage = null;
+    /** Fractal controller **/
     private Controller           controller = null;
+    /** Fractal factory **/
     private FractalFactory       factory = null;
+    /** Fractal task aggregator **/
     private FractalTaskAggregator taskAggregator = null;
+    /** Fractal thread pool **/
     private ForkJoinPool         forkJoinPool = null;
+    /** Time and date formatter **/
     private DateTimeFormatter    dtf = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+    /** Start X mouse drag coordinate **/
     private double               startDragX = 0.0;
+    /** Start Y mouse drag coordinate **/
     private double               startDragY = 0.0;
+    /** Start time of last fractal rendering **/
     private long                 timeStart  = 0;
+    /** Last generated fractal image **/
     private int[]                copy;
 
     /** Enum state of graphic thread (IDLE, RUNNING). **/
@@ -78,23 +88,33 @@ public class GuiController
 
 
     //=========================== Initialisation GUI =============================
+    /**
+     * {@summary Initialze UI}
+     */
+	 
     @FXML
     public void initialize()
     {
         initEnvironment();
         display();
     }
+	
     /**
      * {@summary Set controller of fractal.}
+     * @param c controller
      */
+	 
     public void setFractalController(Controller c)
     {
         controller = c;
         factory = new FractalFactory(controller);
     }
+	
     /**
      * {@summary Set stage.}
+     * @param primaryStage UI stage
      */
+	 
     public void setStage(Stage primaryStage)
     {
         stage = primaryStage;
@@ -227,8 +247,8 @@ public class GuiController
      * If thread is running:
      * <ul>
      * <li> checks the size (and updates it if necessary)
-     * <li> if there was some changing - abort calculations, then rerun calculations
-     * <li> if nothing was changed - check if ForkJoinPool finished his work and draw image; if not - prints "." to log field to indicate processing
+     * <li> if there was some changing - abort current calculations (if any in progress), then rerun calculations
+     * <li> if nothing was changed and calculation is in progress - check if ForkJoinPool finished his work and draw image; if not - prints "." to log field to indicate processing
      *
      * If thread is idle:
      * <li> checks the size (and updates it if necessary)
@@ -339,6 +359,7 @@ public class GuiController
     }
     /**
      * {@summary Load fractal from config file (.fct).}
+     * @param e UI event
      */
     private void importConfig(ActionEvent e)
     {
@@ -362,6 +383,7 @@ public class GuiController
     }
     /**
      * {@summary Save image as .png.}
+     * @param e UI event
      */
     private void saveAsPNG(ActionEvent e) throws IOException
     {
@@ -479,8 +501,9 @@ public class GuiController
     }
 
     /**
-     * {@summary Function which check if the size of image was changed by user.}
-     *  In case of changing it change the size of Pane.
+     * {@summary Function checks if the size of image was changed by user through UI, if yes - transfer new size to controller.}
+     * In case of changing it change the size of Pane. Controller changes it's internal state to "changed" and UI using Timeline (function display()) 
+	 * is detecting changes and start/restart fractal calculation
      */
     private void updateSize()
     {
