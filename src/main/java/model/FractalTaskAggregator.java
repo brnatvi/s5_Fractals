@@ -7,12 +7,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.RecursiveTask;
 
+/**
+ * The class FractalTaskAgregator proceeds in calculating the received parts of the fractal.
+ * It extends RecursiveTask.
+ */
 public class FractalTaskAggregator extends RecursiveTask<int[]>
 {
+    /** FractalFactory as parameter of FractalTaskAgregator**/
     private FractalFactory factory;
+    /** Width and height which will be used in image creation**/
     private int width  = 0;
     private int height = 0;
 
+    /**
+     * {@summary Constructor which instantiates FractalTaskAgregator. }
+     * @param c the Controller
+     * @param f the FractalFactory
+     */
     public FractalTaskAggregator(FractalFactory f, Controller c)
     {
         this.factory = f;
@@ -20,9 +31,21 @@ public class FractalTaskAggregator extends RecursiveTask<int[]>
         this.height = c.getHeightPNG();
     }
 
+    /**
+     * {@summary Gets the width of the created image.}
+     * @return the width of the created image
+     */
     public int getWidth() { return width; }
+
+    /**
+     * {@summary Gets the height of the created image.}
+     * @return the height of the created image
+     */
     public int getHeight() { return height; }
 
+    /**
+     * {@summary The method of concatenation of the received parts of the fractal.}
+     */
     private int[] concatArrays(ArrayList<int[]> arrays)
     {
         int size   = 0;
@@ -42,6 +65,9 @@ public class FractalTaskAggregator extends RecursiveTask<int[]>
         return result;
     }
 
+    /**
+     * {@summary The method of calculation, override from RecursiveTask.}
+     */
     @Override
     protected int[] compute()
     {

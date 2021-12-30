@@ -6,8 +6,12 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.function.BiFunction;
 
+/**
+ * The interface Initialisable is implemented by Controller and defines necessary methods
+ */
 public interface Initialisable
 {
+    /** Enums to define types of function and fractal as well as color scheme**/
     enum TypeFunction {QUADRATIC, CUBIC, BIQUADRATIC};
     enum TypeFractal {JULIA, MANDELBROT};
     enum ColorScheme {RED, GREEN, BLUE};

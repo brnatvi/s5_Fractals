@@ -11,9 +11,15 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.stage.WindowEvent;
 
-
+/**
+ * The class Gui provides a graphic user interface to interact with the program.
+ * It extends Application.
+ */
 public class Gui extends Application
 {
+    /**
+     * override of start() method of Application.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception
     {
@@ -54,5 +60,8 @@ public class Gui extends Application
         });
     }
 
+    /**
+     * main method
+     */
     public static void main(String[] args) { launch(args); }
 }

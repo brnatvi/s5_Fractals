@@ -15,13 +15,22 @@ import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
+/**
+ * The class Cli provides a command line interface to interact with the program.
+ */
 public class Cli
 {
+    /** Controller as parameter of Cli**/
     private Controller controller = null;
+    /** Parser as inner class of Cli**/
     private Parser parser = null;
+    /** Report as inner class of Cli**/
     private Report report = null;
 
     //============================ Constructor ==============================
+    /**
+     * {@summary External use constructor. Instantiates Cli. }
+     */
     public Cli(String[] args)
     {
         for (String arg : args)
@@ -50,11 +59,20 @@ public class Cli
     }
 
     //=========================== Inner classes ==============================
+    /**
+     * Inner class Parser, reads command line arguments. }
+     */
     private class Parser
     {
+        /** Controller as parameter of Parser**/
         private Controller controller = null;
+        /** Map containing parameters**/
         private Map<String, String> params = null;
 
+        /**
+         * {@summary Constructor which instantiates Parser. }
+         * @param c Controller
+         */
         public Parser(Controller c, String[] args)
         {
             controller = c;
@@ -62,6 +80,9 @@ public class Cli
             params.forEach((k, v) -> initController(k, v));
         }
 
+        /**
+         * {@summary The method for parsing command line arguments.}
+         */
         private Map<String, String> parse(String[] args)
         {
             if (args.length % 2 == 1)
@@ -73,6 +94,9 @@ public class Cli
                     .collect(LinkedHashMap::new, (m, i) -> m.put(args[i].substring(2), args[i + 1]), Map::putAll);
         }
 
+        /**
+         * {@summary Instantiates a Controller with given parameters.}
+         */
         private void initController(String k, String v)
         {
             switch (k)
@@ -218,14 +242,27 @@ public class Cli
             }
     }
 
+    /**
+     * Inner class Report, reads command line arguments. }
+     */
     private class Report
     {
+        /** Controller as parameter of Report**/
         private Controller controller  = null;
+        /** Stores the time necessary to calculate**/
         private double     timeOfCalc  = 0;
+        /** Stores the time necessary to paint**/
         private long       timeOfPaint = 0;
 
+        /**
+         * {@summary Constructor which instantiates Report. }
+         * @param c Controller
+         */
         public Report(Controller c) {  controller = c; }
 
+        /**
+         * {@summary prints Report parameters. }
+         */
         private void printParameters()
         {
             System.out.println("\nFractal parameters: " + controller.getTypeFractal().toString() +
@@ -240,11 +277,14 @@ public class Cli
                     "Image W:" + controller.getWidthPNG() + " H:" + controller.getHeightPNG());
         }
 
+        /**
+         * {@summary prints Report. }
+         */
         private void printReport()
         {
             if (controller.getIsDisplayTime() == true)
             {
-                System.out.println("This fractal was calculated during " + timeOfCalc + " seconds");
+                System.out.println("This fractal has been calculated in " + timeOfCalc + " seconds");
                 System.out.println("and painted on image " + controller.getWidthPNG() +
                         " pxl x " + controller.getHeightPNG() +
                         " pxl during " + timeOfPaint + " milliseconds");
@@ -254,6 +294,9 @@ public class Cli
 
     //============================ Lambda's getters ==============================
 
+    /**
+     * {@summary Help with options available. }
+     */
     private void showHelp()
     {
         String message = "\nWelcome to fabulous world of fractals !!\n\n" +
@@ -289,6 +332,9 @@ public class Cli
         System.out.println(message);
     }
 
+    /**
+     * {@summary launches Cli. }
+     */
     private void launch() throws IOException
     {
         System.out.println("\nProcessing...\n");
@@ -324,6 +370,9 @@ public class Cli
     }
 
     //============================ Main function ==============================
+    /**
+     * main method
+     */
     public static void main(String[] args)
     {
         Cli cli = new Cli(args);
