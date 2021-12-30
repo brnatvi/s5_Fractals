@@ -51,9 +51,13 @@ Launch /docs/javadoc/apidocs/index.html on the web browser.
 # **Features**
 
 It's possible to modify follows parameters:
-* 
+* type of fractal (fractals of Julia and Mandelbrot are available)
+* function for calculation (quadratic, cubic and biquadratic functions are available)
+* number of max iterations
+* number of threads for calculation
+* color representation
+* size of generated image (in GUI mode it happens with changing of window's dimensions)
 
-
-![](code/target/project_1_resized.mp4)
-
-
+It is also possible to load fractal from config file (few examples with extension .fct are available in the root of project) 
+and to save current parameters to config (with .fct extension).
+Process logs are displayed on GUI mode, report is available on CLI mode. 
