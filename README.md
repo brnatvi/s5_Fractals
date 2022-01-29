@@ -7,6 +7,8 @@
 
 Fractals is a programme to create a graphic representation of Julia's and Mandelbrot's sets.
 
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_1.gif)
+
 ![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_2.gif)
 
 # **How to use**
@@ -61,10 +63,7 @@ It's possible to modify follows parameters:
 
 ![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_6.gif)
 
-* number of max iterations
-
-![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_1.gif)
-
+* complex constant and number of max iterations
 * number of threads for calculation
 * color representation
 * size of generated image (in GUI mode it happens with changing of window's dimensions)
