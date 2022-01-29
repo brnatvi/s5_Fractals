@@ -7,7 +7,7 @@
 
 Fractals is a programme to create a graphic representation of Julia's and Mandelbrot's sets.
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_2.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_2.gif)
 
 # **How to use**
 
@@ -55,15 +55,15 @@ Launch /docs/javadoc/apidocs/index.html on the web browser.
 It's possible to modify follows parameters:
 * type of fractal (fractals of Julia and Mandelbrot are available)
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_4.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_4.gif)
 
 * function for calculation (quadratic, cubic and biquadratic functions are available)
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_6.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_6.gif)
 
 * number of max iterations
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_1.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_1.gif)
 
 * number of threads for calculation
 * color representation
@@ -73,8 +73,8 @@ It is also possible to load fractal from config file (few examples with extensio
 and to save current parameters to config (with .fct extension).
 Process logs are displayed on GUI mode, report is available on CLI mode. 
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_3.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_3.gif)
 
 
-![](https://github.com/brnatvi/s5_Fractals/gifs/video_5.gif)
+![](https://github.com/brnatvi/s5_Fractals/blob/main/gifs/video_5.gif)
 
